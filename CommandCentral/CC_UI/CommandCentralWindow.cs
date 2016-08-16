@@ -58,10 +58,13 @@ namespace CommandCentral.CC_UI
         /// <param name="e"></param>
         private void CommandCentralWindow_Shown(object sender, EventArgs e)
         {
-            // INITIALIZE THE FIRST ROW
-            createNewRow(CommandGridAttributes.RowType.Blank);
+            initFirstRow();
         }
-
+        private void initFirstRow()
+        {
+            // INITIALIZE THE FIRST ROW
+            createNewRow(CommandGridAttributes.RowType.Blank, Lib.FIRST_LINE_VALUE);
+        }
 
 
         #region UI SETUP  >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
@@ -295,6 +298,7 @@ namespace CommandCentral.CC_UI
         /// </summary>
         private void createNewRow(CommandGridAttributes.RowType rowType, string newRowValue = "")
         {
+            string marginValue = Lib.MARGIN_CHAR_DEFAULT;
 
             // Format row we are leaving
             if (this.cmdEntryDataGrid.RowCount > 0)
@@ -311,7 +315,7 @@ namespace CommandCentral.CC_UI
             int newRowID;
             this.cmdEntryDataGrid.Rows.Add();
             newRowID = cmdEntryDataGrid.RowCount - 1;
-            this.cmdEntryDataGrid.Rows[newRowID].Cells[CommandGridAttributes.Columns.COL_MARGIN].Value = ">";
+            this.cmdEntryDataGrid.Rows[newRowID].Cells[CommandGridAttributes.Columns.COL_MARGIN].Value = marginValue;
 
             // Set newRowValue - multi line
             if (newRowValue.Contains(Lib.NL))
@@ -337,6 +341,10 @@ namespace CommandCentral.CC_UI
                 // Set newRowValue - single line
                 this.cmdEntryDataGrid.CurrentCell = this.cmdEntryDataGrid.Rows[newRowID].Cells[CommandGridAttributes.Columns.COL_COMMAND];
                 this.cmdEntryDataGrid.CurrentCell.Value = newRowValue;
+
+                // Color code
+                if (newRowValue.Equals(Lib.FIRST_LINE_VALUE))
+                    this.cmdEntryDataGrid.CurrentCell.Style.ForeColor = Color.LimeGreen;
             }
 
             // Set focus to new row
@@ -347,7 +355,7 @@ namespace CommandCentral.CC_UI
             if (newRowValue.Length > 0)
             {
                 this.cmdEntryDataGrid.Rows.Add();
-                this.cmdEntryDataGrid.Rows[cmdEntryDataGrid.RowCount - 1].Cells[CommandGridAttributes.Columns.COL_MARGIN].Value = ">";
+                this.cmdEntryDataGrid.Rows[cmdEntryDataGrid.RowCount - 1].Cells[CommandGridAttributes.Columns.COL_MARGIN].Value = marginValue;
                 this.cmdEntryDataGrid.CurrentCell = this.cmdEntryDataGrid.Rows[cmdEntryDataGrid.RowCount - 1].Cells[CommandGridAttributes.Columns.COL_COMMAND];
                 this.cmdEntryDataGrid.Focus();
                 this.cmdEntryDataGrid.BeginEdit(false);
@@ -394,6 +402,7 @@ namespace CommandCentral.CC_UI
                 // Get cell value
                 String cmdName = (this.cmdEntryDataGrid.CurrentCell.EditedFormattedValue == null) ? "" : this.cmdEntryDataGrid.CurrentCell.EditedFormattedValue.ToString();
 
+                // Execute Command
                 string runCmdReturnString = "";
                 if (cmdProc.executeCmd(new ECommand(cmdName), out runCmdReturnString))
                     createNewRow(CommandGridAttributes.RowType.Success, runCmdReturnString);

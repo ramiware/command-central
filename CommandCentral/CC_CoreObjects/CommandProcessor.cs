@@ -71,8 +71,7 @@ namespace CommandCentral.CC_CoreObjects
                 {
                     if (cmd.CmdName.Equals(oICommandsList.getCommandsList()[i].CmdName, StringComparison.CurrentCultureIgnoreCase))
                     {
-                        processInternalCmd(cmd.CmdName);
-                        runCmdReturnString = "";
+                        processInternalCmd(cmd.CmdName, out runCmdReturnString);
                         return true;
                     }
                 }
@@ -104,7 +103,7 @@ namespace CommandCentral.CC_CoreObjects
         /// processes internal commands
         /// </summary>
         /// <param name="cmdName"></param>
-        private void processInternalCmd(string cmdName)
+        private void processInternalCmd(string cmdName, out string runCmdReturnString)
         {
             // Is this an actual internal command?
             bool internalCmdFound = false;
@@ -117,6 +116,7 @@ namespace CommandCentral.CC_CoreObjects
                 }
             }
 
+            runCmdReturnString = "";
             if (!internalCmdFound)
                 return;
 
@@ -130,7 +130,10 @@ namespace CommandCentral.CC_CoreObjects
 
             // clear
             if (cmdName.Equals("clear", StringComparison.CurrentCultureIgnoreCase))
+            {
+                runCmdReturnString = Lib.FIRST_LINE_VALUE;
                 oCmdWin.clearScreen();
+            }
 
             // exit script
             if (cmdName.Equals("exit", StringComparison.CurrentCultureIgnoreCase))
