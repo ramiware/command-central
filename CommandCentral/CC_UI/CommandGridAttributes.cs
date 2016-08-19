@@ -15,13 +15,10 @@ namespace CommandCentral.CC_UI
             public const String COL_COMMAND = "Command";
         }
 
-        // GRID ROW TYPES
-        public enum RowType
-        {
-            Blank,
-            ErrorMsg,
-            InfoMsg,
-            ReadyForInput
-        }
+        public static int ROW_HEIGHT = 14;
+
+        public static string MARGIN_CHAR_DEFAULT = "$";
+        public static string MARGIN_CHAR_MESSAGE = "";
+
     }
 }

@@ -9,11 +9,15 @@ namespace CommandCentral.CC_CoreObjects
     /// <summary>
     /// Internal Commands
     /// </summary>
-    class ICommand
+    class ICommand : CommandObject
     {
-        public string CmdName { get; set; }
         public string CmdDesc { get; set; }
 
+        /// <summary>
+        /// Constructor: Creates a Command object
+        /// </summary>
+        /// <param name="cmdName"></param>
+        /// <param name="cmdDesc"></param>
         public ICommand(string cmdName, string cmdDesc)
         {
             CmdName = cmdName;
@@ -21,20 +25,16 @@ namespace CommandCentral.CC_CoreObjects
         }
 
         /// <summary>
-        /// Override Equals so that we can use Remove() function
+        /// Constructor: Creates a Command object - retrieves CmdDesc from CommandsList
         /// </summary>
-        /// <param name="obj"></param>
-        /// <returns></returns>
-        public override bool Equals(object obj)
+        /// <param name="cmdName"></param>
+        public ICommand(string cmdName)
         {
-            var other = obj as ECommand;
-            if (other == null)
-                return false;
-            return other.CmdName.Equals(this.CmdName, StringComparison.CurrentCultureIgnoreCase);
+            CmdName = cmdName;
+
+            ICommandsList cmdList = new ICommandsList();
+            CmdDesc = cmdList.getCmdDesc(cmdName);
         }
-        public override int GetHashCode()
-        {
-            return base.GetHashCode();
-        }
+
     }
 }

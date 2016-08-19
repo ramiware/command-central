@@ -39,11 +39,8 @@ namespace CommandCentral.CC_CoreObjects
         public bool addCmd(ECommand newCmd)
         {
             // do not allow 2 commands with same name
-            foreach (ECommand cmd in cmdsList)
-            {
-                if (cmd.CmdName.Equals(newCmd.CmdName))
-                    return false;
-            }
+            if (cmdsList.Contains(newCmd))
+                return false;
 
             // add cmd to list
             newCmd.CmdName = newCmd.CmdName.ToUpper();
@@ -56,7 +53,7 @@ namespace CommandCentral.CC_CoreObjects
         }
 
         /// <summary>
-        /// Removes the cmd from the cmdsList and command file
+        /// Removes the cmd from the cmdsList and command filea
         /// </summary>
         /// <param name="removeCmd"></param>
         public void removeCmd(ECommand removeCmd)
@@ -80,13 +77,13 @@ namespace CommandCentral.CC_CoreObjects
         /// <summary>
         /// Returns the RunCmd for any given cmd
         /// </summary>
-        /// <param name="name"></param>
+        /// <param name="cmdName"></param>
         /// <returns></returns>
-        internal string getRunCmd(string name)
+        internal string getRunCmd(string cmdName)
         {
             foreach (ECommand cmdItem in cmdsList)
             {
-                if (cmdItem.CmdName.Equals(name, StringComparison.CurrentCultureIgnoreCase))
+                if (cmdItem.CmdName.Equals(cmdName, StringComparison.CurrentCultureIgnoreCase))
                     return cmdItem.RunCmd;
             }
             return "";

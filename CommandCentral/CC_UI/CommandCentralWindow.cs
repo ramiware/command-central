@@ -65,7 +65,7 @@ namespace CommandCentral.CC_UI
         private void initFirstRow()
         {
             // INITIALIZE THE FIRST ROW
-            createNewRow(CommandGridAttributes.RowType.InfoMsg, Lib.FIRST_LINE_VALUE);
+            createNewRow(CommandProcessor.ReturnType.InfoMsg, Lib.FIRST_LINE_VALUE);
         }
 
 
@@ -94,7 +94,7 @@ namespace CommandCentral.CC_UI
         /// <summary>
         /// Handles adding new rows to the grid
         /// </summary>
-        private void createNewRow(CommandGridAttributes.RowType rowType, string newRowValue = "")
+        private void createNewRow(CommandProcessor.ReturnType runCmdReturnType, string newRowValue = "")
         {
             // --------------------------------------
             // Format row we are leaving
@@ -103,10 +103,13 @@ namespace CommandCentral.CC_UI
             {
                 this.cmdEntryDataGrid.CurrentCell = this.cmdEntryDataGrid.Rows[cmdEntryDataGrid.RowCount - 1].Cells[CommandGridAttributes.Columns.COL_COMMAND];
 
-                if (rowType.Equals(CommandGridAttributes.RowType.ErrorMsg))
+                if (runCmdReturnType.Equals(CommandProcessor.ReturnType.ErrorMsg))
                     this.cmdEntryDataGrid.CurrentCell.Style.ForeColor = Color.Gray;
-                if (rowType.Equals(CommandGridAttributes.RowType.InfoMsg))
+                if (runCmdReturnType.Equals(CommandProcessor.ReturnType.InfoMsg))
                     this.cmdEntryDataGrid.CurrentCell.Style.ForeColor = Color.Gold;
+                if (runCmdReturnType.Equals(CommandProcessor.ReturnType.ExecMsg))
+                    this.cmdEntryDataGrid.CurrentCell.Style.ForeColor = Color.LimeGreen;
+
             }
 
             // --------------------------------------
@@ -116,10 +119,12 @@ namespace CommandCentral.CC_UI
             this.cmdEntryDataGrid.Rows.Add();
             newRowID = cmdEntryDataGrid.RowCount - 1;
 
-            if (rowType.Equals(CommandGridAttributes.RowType.ErrorMsg) || rowType.Equals(CommandGridAttributes.RowType.InfoMsg))
-                this.cmdEntryDataGrid.Rows[newRowID].Cells[CommandGridAttributes.Columns.COL_MARGIN].Value = Lib.MARGIN_CHAR_MESSAGE;
+            if (runCmdReturnType.Equals(CommandProcessor.ReturnType.ErrorMsg) || 
+                runCmdReturnType.Equals(CommandProcessor.ReturnType.InfoMsg) ||
+                runCmdReturnType.Equals(CommandProcessor.ReturnType.ExecMsg))
+                this.cmdEntryDataGrid.Rows[newRowID].Cells[CommandGridAttributes.Columns.COL_MARGIN].Value = CommandGridAttributes.MARGIN_CHAR_MESSAGE;
             else
-                this.cmdEntryDataGrid.Rows[newRowID].Cells[CommandGridAttributes.Columns.COL_MARGIN].Value = Lib.MARGIN_CHAR_DEFAULT;
+                this.cmdEntryDataGrid.Rows[newRowID].Cells[CommandGridAttributes.Columns.COL_MARGIN].Value = CommandGridAttributes.MARGIN_CHAR_DEFAULT;
 
             // --------------------------------------
             // Set newRowValue - single line
@@ -164,7 +169,7 @@ namespace CommandCentral.CC_UI
             if (newRowValue.Length > 0)
             {
                 this.cmdEntryDataGrid.Rows.Add();
-                this.cmdEntryDataGrid.Rows[cmdEntryDataGrid.RowCount - 1].Cells[CommandGridAttributes.Columns.COL_MARGIN].Value = Lib.MARGIN_CHAR_DEFAULT;
+                this.cmdEntryDataGrid.Rows[cmdEntryDataGrid.RowCount - 1].Cells[CommandGridAttributes.Columns.COL_MARGIN].Value = CommandGridAttributes.MARGIN_CHAR_DEFAULT;
                 this.cmdEntryDataGrid.CurrentCell = this.cmdEntryDataGrid.Rows[cmdEntryDataGrid.RowCount - 1].Cells[CommandGridAttributes.Columns.COL_COMMAND];
             }
 
@@ -215,9 +220,9 @@ namespace CommandCentral.CC_UI
 
                 // Execute Command
                 string runCmdReturnString = "";
-                CommandGridAttributes.RowType nextRowRowType;
-                cmdProc.executeCmd(new ECommand(cmdName), out nextRowRowType, out runCmdReturnString);
-                createNewRow(nextRowRowType, runCmdReturnString);
+                CommandProcessor.ReturnType runCmdReturnType;
+                cmdProc.executeCmd(new CommandObject(cmdName), out runCmdReturnType, out runCmdReturnString);
+                createNewRow(runCmdReturnType, runCmdReturnString);
        
                 return true;
             }
@@ -256,7 +261,7 @@ namespace CommandCentral.CC_UI
             // Setting up datagrid
             // ROW TEMPLATE
             DataGridViewRow templateRow = new DataGridViewRow();
-            templateRow.Height = 16;
+            templateRow.Height = CommandGridAttributes.ROW_HEIGHT;
             this.cmdEntryDataGrid.RowTemplate = templateRow;
 
             // ADD COLUMNS

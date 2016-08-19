@@ -20,9 +20,28 @@ namespace CommandCentral.CC_CoreObjects
 
         }
 
+        /// <summary>
+        /// Returns the Commands List
+        /// </summary>
+        /// <returns></returns>
         public List<ICommand> getCommandsList()
         {
             return this.iCmdList;
+        }
+
+        /// <summary>
+        /// Returns the CmdDesc for any given cmd
+        /// </summary>
+        /// <param name="cmdName"></param>
+        /// <returns></returns>
+        internal string getCmdDesc(string cmdName)
+        {
+            foreach (ICommand cmdItem in iCmdList)
+            {
+                if (cmdItem.CmdName.Equals(cmdName, StringComparison.CurrentCultureIgnoreCase))
+                    return cmdItem.CmdDesc;
+            }
+            return "";
         }
     }
 }

@@ -5,59 +5,31 @@ using System.Text;
 
 namespace CommandCentral.CC_CoreObjects
 {
-    public class ECommand : IComparable<ECommand>
+    public class ECommand : CommandObject
     {
-        public string CmdName { get; set; }
         public string RunCmd { get; set; }
 
         /// <summary>
         /// Constructor: Creates a Command object
         /// </summary>
-        /// <param name="name"></param>
+        /// <param name="cmdName"></param>
         /// <param name="runCmd"></param>
-        public ECommand(string name, string runCmd)
+        public ECommand(string cmdName, string runCmd)
         {
-            this.CmdName = name;
+            this.CmdName = cmdName;
             this.RunCmd = runCmd;
         }
 
         /// <summary>
         /// Constructor: Creates a Command object - retrieves RunCmd from CommandsList
         /// </summary>
-        /// <param name="name"></param>
-        public ECommand(string name)
+        /// <param name="cmdName"></param>
+        public ECommand(string cmdName)
         {
-            CmdName = name;
+            CmdName = cmdName;
 
             ECommandsList cmdList = new ECommandsList();
-            RunCmd = cmdList.getRunCmd(name);
-        }
-
-        /// <summary>
-        /// Override CompareTo using IComparable to use Sort() function
-        /// </summary>
-        /// <param name="other"></param>
-        /// <returns></returns>
-        public int CompareTo(ECommand other)
-        {
-            return CmdName.CompareTo(other.CmdName);
-        }
-
-        /// <summary>
-        /// Override Equals so that we can use Remove() function
-        /// </summary>
-        /// <param name="obj"></param>
-        /// <returns></returns>
-        public override bool Equals(object obj)
-        {
-            var other = obj as ECommand;
-            if (other == null)
-                return false;
-            return other.CmdName.ToUpper() == this.CmdName.ToUpper() && other.RunCmd == this.RunCmd;
-        }
-        public override int GetHashCode()
-        {
-            return base.GetHashCode();
+            RunCmd = cmdList.getRunCmd(cmdName);
         }
     }
 }
