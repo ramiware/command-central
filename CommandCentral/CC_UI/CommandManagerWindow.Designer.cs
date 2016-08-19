@@ -165,9 +165,10 @@
             // 
             // addTab_RunCmdTextBox
             // 
+            this.addTab_RunCmdTextBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.addTab_RunCmdTextBox.Location = new System.Drawing.Point(22, 117);
             this.addTab_RunCmdTextBox.Name = "addTab_RunCmdTextBox";
-            this.addTab_RunCmdTextBox.Size = new System.Drawing.Size(284, 20);
+            this.addTab_RunCmdTextBox.Size = new System.Drawing.Size(284, 18);
             this.addTab_RunCmdTextBox.TabIndex = 2;
             this.addTab_RunCmdTextBox.TextChanged += new System.EventHandler(this.addTab_RunCmdTextBox_TextChanged);
             // 

@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(CommandCentralWindow));
             this.headerLabel = new System.Windows.Forms.Label();
             this.cmdsListPanel = new System.Windows.Forms.Panel();
@@ -51,8 +51,9 @@
             // 
             this.headerLabel.Dock = System.Windows.Forms.DockStyle.Top;
             this.headerLabel.Location = new System.Drawing.Point(0, 0);
+            this.headerLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.headerLabel.Name = "headerLabel";
-            this.headerLabel.Size = new System.Drawing.Size(396, 20);
+            this.headerLabel.Size = new System.Drawing.Size(396, 19);
             this.headerLabel.TabIndex = 99;
             this.headerLabel.Text = "Copyright (c) 2005 - 2016 RamiWare. All rights reserved.";
             // 
@@ -63,9 +64,10 @@
             this.cmdsListPanel.BackColor = System.Drawing.Color.Black;
             this.cmdsListPanel.Controls.Add(this.cmdsListTextArea);
             this.cmdsListPanel.Controls.Add(this.cmdsListLabel);
-            this.cmdsListPanel.Location = new System.Drawing.Point(289, 2);
+            this.cmdsListPanel.Location = new System.Drawing.Point(299, 3);
+            this.cmdsListPanel.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.cmdsListPanel.Name = "cmdsListPanel";
-            this.cmdsListPanel.Size = new System.Drawing.Size(103, 340);
+            this.cmdsListPanel.Size = new System.Drawing.Size(92, 341);
             this.cmdsListPanel.TabIndex = 2;
             // 
             // cmdsListTextArea
@@ -77,13 +79,13 @@
             this.cmdsListTextArea.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.cmdsListTextArea.Cursor = System.Windows.Forms.Cursors.Arrow;
             this.cmdsListTextArea.ForeColor = System.Drawing.Color.White;
-            this.cmdsListTextArea.Location = new System.Drawing.Point(3, 19);
+            this.cmdsListTextArea.Location = new System.Drawing.Point(0, 19);
             this.cmdsListTextArea.Margin = new System.Windows.Forms.Padding(1);
             this.cmdsListTextArea.Multiline = true;
             this.cmdsListTextArea.Name = "cmdsListTextArea";
             this.cmdsListTextArea.ReadOnly = true;
             this.cmdsListTextArea.ShortcutsEnabled = false;
-            this.cmdsListTextArea.Size = new System.Drawing.Size(99, 311);
+            this.cmdsListTextArea.Size = new System.Drawing.Size(91, 311);
             this.cmdsListTextArea.TabIndex = 99;
             this.cmdsListTextArea.TabStop = false;
             this.cmdsListTextArea.Enter += new System.EventHandler(this.cmdsListTextArea_Enter);
@@ -93,10 +95,11 @@
             this.cmdsListLabel.BackColor = System.Drawing.Color.Black;
             this.cmdsListLabel.Dock = System.Windows.Forms.DockStyle.Top;
             this.cmdsListLabel.Location = new System.Drawing.Point(0, 0);
+            this.cmdsListLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.cmdsListLabel.Name = "cmdsListLabel";
-            this.cmdsListLabel.Size = new System.Drawing.Size(103, 18);
+            this.cmdsListLabel.Size = new System.Drawing.Size(92, 18);
             this.cmdsListLabel.TabIndex = 99;
-            this.cmdsListLabel.Text = "Commands List";
+            this.cmdsListLabel.Text = "COMMANDS LIST";
             // 
             // cmdEntryDataGrid
             // 
@@ -113,24 +116,25 @@
             this.cmdEntryDataGrid.ClipboardCopyMode = System.Windows.Forms.DataGridViewClipboardCopyMode.EnableWithoutHeaderText;
             this.cmdEntryDataGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.cmdEntryDataGrid.ColumnHeadersVisible = false;
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.TopLeft;
-            dataGridViewCellStyle2.BackColor = System.Drawing.Color.Black;
-            dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle2.ForeColor = System.Drawing.Color.White;
-            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.cmdEntryDataGrid.DefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.TopLeft;
+            dataGridViewCellStyle6.BackColor = System.Drawing.Color.Black;
+            dataGridViewCellStyle6.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle6.ForeColor = System.Drawing.Color.White;
+            dataGridViewCellStyle6.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle6.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle6.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.cmdEntryDataGrid.DefaultCellStyle = dataGridViewCellStyle6;
             this.cmdEntryDataGrid.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically;
             this.cmdEntryDataGrid.GridColor = System.Drawing.Color.Yellow;
             this.cmdEntryDataGrid.ImeMode = System.Windows.Forms.ImeMode.NoControl;
             this.cmdEntryDataGrid.Location = new System.Drawing.Point(0, 0);
+            this.cmdEntryDataGrid.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.cmdEntryDataGrid.MultiSelect = false;
             this.cmdEntryDataGrid.Name = "cmdEntryDataGrid";
             this.cmdEntryDataGrid.RowHeadersVisible = false;
             this.cmdEntryDataGrid.RowTemplate.Height = 23;
             this.cmdEntryDataGrid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
-            this.cmdEntryDataGrid.Size = new System.Drawing.Size(288, 342);
+            this.cmdEntryDataGrid.Size = new System.Drawing.Size(298, 342);
             this.cmdEntryDataGrid.TabIndex = 0;
             this.cmdEntryDataGrid.TabStop = false;
             this.cmdEntryDataGrid.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.cmdEntryDataGrid_CellClick);
@@ -141,7 +145,8 @@
             this.panelMainArea.Controls.Add(this.cmdEntryDataGrid);
             this.panelMainArea.Controls.Add(this.cmdsListPanel);
             this.panelMainArea.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panelMainArea.Location = new System.Drawing.Point(0, 20);
+            this.panelMainArea.Location = new System.Drawing.Point(0, 19);
+            this.panelMainArea.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.panelMainArea.Name = "panelMainArea";
             this.panelMainArea.Size = new System.Drawing.Size(396, 342);
             this.panelMainArea.TabIndex = 100;
@@ -153,13 +158,13 @@
             this.customizeMenuItem,
             this.exitMenuItem});
             this.ccContextMenuStrip.Name = "cmdBoxMenu";
-            this.ccContextMenuStrip.Size = new System.Drawing.Size(153, 92);
+            this.ccContextMenuStrip.Size = new System.Drawing.Size(137, 70);
             // 
             // commandsMenuItem
             // 
             this.commandsMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("commandsMenuItem.Image")));
             this.commandsMenuItem.Name = "commandsMenuItem";
-            this.commandsMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.commandsMenuItem.Size = new System.Drawing.Size(136, 22);
             this.commandsMenuItem.Text = "Commands";
             this.commandsMenuItem.Click += new System.EventHandler(this.commandsMenuItem_Click);
             // 
@@ -167,14 +172,14 @@
             // 
             this.customizeMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("customizeMenuItem.Image")));
             this.customizeMenuItem.Name = "customizeMenuItem";
-            this.customizeMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.customizeMenuItem.Size = new System.Drawing.Size(136, 22);
             this.customizeMenuItem.Text = "Customize";
             // 
             // exitMenuItem
             // 
             this.exitMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("exitMenuItem.Image")));
             this.exitMenuItem.Name = "exitMenuItem";
-            this.exitMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.exitMenuItem.Size = new System.Drawing.Size(136, 22);
             this.exitMenuItem.Text = "Exit";
             // 
             // CommandCentralWindow
@@ -182,12 +187,14 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Black;
-            this.ClientSize = new System.Drawing.Size(396, 362);
+            this.ClientSize = new System.Drawing.Size(396, 361);
             this.Controls.Add(this.panelMainArea);
             this.Controls.Add(this.headerLabel);
+            this.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.ForeColor = System.Drawing.Color.White;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.MinimumSize = new System.Drawing.Size(412, 400);
+            this.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            this.MinimumSize = new System.Drawing.Size(412, 399);
             this.Name = "CommandCentralWindow";
             this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
             this.Text = "Command Central 4.0";

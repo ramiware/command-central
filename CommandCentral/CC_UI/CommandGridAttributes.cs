@@ -19,8 +19,9 @@ namespace CommandCentral.CC_UI
         public enum RowType
         {
             Blank,
-            Error,
-            Success
+            ErrorMsg,
+            InfoMsg,
+            ReadyForInput
         }
     }
 }

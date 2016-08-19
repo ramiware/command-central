@@ -25,7 +25,7 @@ namespace CommandCentral.CC_CoreObjects
             string name, runCmd;
             foreach (string currItem in cmdsListAsArrayList)
             {
-                name = currItem.Substring(0, currItem.IndexOf("=")).Trim();
+                name = currItem.Substring(0, currItem.IndexOf("=")).Trim().ToUpper();
                 runCmd = currItem.Substring(currItem.IndexOf("=") + 1).Trim();
                 cmdsList.Add(new ECommand(name, runCmd));
             }
@@ -46,6 +46,7 @@ namespace CommandCentral.CC_CoreObjects
             }
 
             // add cmd to list
+            newCmd.CmdName = newCmd.CmdName.ToUpper();
             cmdsList.Add(newCmd);
             // add cmd to file
             CommandsFile cmdsFile = new CommandsFile();
@@ -85,7 +86,7 @@ namespace CommandCentral.CC_CoreObjects
         {
             foreach (ECommand cmdItem in cmdsList)
             {
-                if (cmdItem.CmdName.Equals(name))
+                if (cmdItem.CmdName.Equals(name, StringComparison.CurrentCultureIgnoreCase))
                     return cmdItem.RunCmd;
             }
             return "";

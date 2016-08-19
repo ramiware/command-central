@@ -40,8 +40,10 @@ namespace CommandCentral.CC_UI
             // Refresh CommandsList
             refreshCommandsList();
 
-            // Set objects
+            // CommandProcessor
             cmdProc = new CommandProcessor(this);
+
+            // Context Menu
             cmdEntryDataGrid.ContextMenuStrip = ccContextMenuStrip;
             cmdsListPanel.ContextMenuStrip = ccContextMenuStrip;
             cmdsListTextArea.ContextMenuStrip = ccContextMenuStrip;
@@ -63,9 +65,187 @@ namespace CommandCentral.CC_UI
         private void initFirstRow()
         {
             // INITIALIZE THE FIRST ROW
-            createNewRow(CommandGridAttributes.RowType.Blank, Lib.FIRST_LINE_VALUE);
+            createNewRow(CommandGridAttributes.RowType.InfoMsg, Lib.FIRST_LINE_VALUE);
         }
 
+
+        /// <summary>
+        /// Clears the grid
+        /// </summary>
+        public void clearScreen()
+        {
+            this.cmdEntryDataGrid.Rows.Clear();
+        }
+
+        /// <summary>
+        /// Loads/refreshes the CommandsList
+        /// </summary>
+        public void refreshCommandsList()
+        {
+            ECommandsList cmdsList = new ECommandsList();
+            if (cmdsList.getCommandsList().Count == 0)
+                return;
+
+            this.cmdsListTextArea.Text = "";
+            for (int i = 0; i < cmdsList.getCommandsList().Count; i++)
+                this.cmdsListTextArea.Text += cmdsList.getCommandsList()[i].CmdName + "\r\n";
+        }
+
+        /// <summary>
+        /// Handles adding new rows to the grid
+        /// </summary>
+        private void createNewRow(CommandGridAttributes.RowType rowType, string newRowValue = "")
+        {
+            // --------------------------------------
+            // Format row we are leaving
+            // --------------------------------------
+            if (this.cmdEntryDataGrid.RowCount > 0)
+            {
+                this.cmdEntryDataGrid.CurrentCell = this.cmdEntryDataGrid.Rows[cmdEntryDataGrid.RowCount - 1].Cells[CommandGridAttributes.Columns.COL_COMMAND];
+
+                if (rowType.Equals(CommandGridAttributes.RowType.ErrorMsg))
+                    this.cmdEntryDataGrid.CurrentCell.Style.ForeColor = Color.Gray;
+                if (rowType.Equals(CommandGridAttributes.RowType.InfoMsg))
+                    this.cmdEntryDataGrid.CurrentCell.Style.ForeColor = Color.Gold;
+            }
+
+            // --------------------------------------
+            // Add new row
+            // --------------------------------------
+            int newRowID;
+            this.cmdEntryDataGrid.Rows.Add();
+            newRowID = cmdEntryDataGrid.RowCount - 1;
+
+            if (rowType.Equals(CommandGridAttributes.RowType.ErrorMsg) || rowType.Equals(CommandGridAttributes.RowType.InfoMsg))
+                this.cmdEntryDataGrid.Rows[newRowID].Cells[CommandGridAttributes.Columns.COL_MARGIN].Value = Lib.MARGIN_CHAR_MESSAGE;
+            else
+                this.cmdEntryDataGrid.Rows[newRowID].Cells[CommandGridAttributes.Columns.COL_MARGIN].Value = Lib.MARGIN_CHAR_DEFAULT;
+
+            // --------------------------------------
+            // Set newRowValue - single line
+            // --------------------------------------
+            if (!newRowValue.Contains(Lib.NL))
+            {
+                this.cmdEntryDataGrid.CurrentCell = this.cmdEntryDataGrid.Rows[newRowID].Cells[CommandGridAttributes.Columns.COL_COMMAND];
+                this.cmdEntryDataGrid.CurrentCell.Value = newRowValue;
+
+                // Handle FIRST_LINE_VALUE - Color code
+                if (newRowValue.Equals(Lib.FIRST_LINE_VALUE))
+                    this.cmdEntryDataGrid.CurrentCell.Style.ForeColor = Color.LimeGreen;
+            }
+
+            // --------------------------------------
+            // Set newRowValue - multi line
+            // --------------------------------------
+            if (newRowValue.Contains(Lib.NL))
+            {
+                string currRowValue = "";
+                for (int i = 0; i < newRowValue.Length; i++)
+                {
+                    // NewLine character 
+                    // - write accumulated text to current row
+                    // - add new row
+                    if (newRowValue[i].ToString().Equals(Lib.NL))
+                    {
+                        this.cmdEntryDataGrid.CurrentCell = this.cmdEntryDataGrid.Rows[newRowID].Cells[CommandGridAttributes.Columns.COL_COMMAND];
+                        this.cmdEntryDataGrid.CurrentCell.Value = currRowValue;
+
+                        this.cmdEntryDataGrid.Rows.Add();
+                        newRowID = cmdEntryDataGrid.RowCount - 1;
+                        currRowValue = "";
+                    }
+                    else // accumulate text
+                        currRowValue += newRowValue[i];
+                }
+            }
+
+
+            // Add entry row if text was written to user
+            if (newRowValue.Length > 0)
+            {
+                this.cmdEntryDataGrid.Rows.Add();
+                this.cmdEntryDataGrid.Rows[cmdEntryDataGrid.RowCount - 1].Cells[CommandGridAttributes.Columns.COL_MARGIN].Value = Lib.MARGIN_CHAR_DEFAULT;
+                this.cmdEntryDataGrid.CurrentCell = this.cmdEntryDataGrid.Rows[cmdEntryDataGrid.RowCount - 1].Cells[CommandGridAttributes.Columns.COL_COMMAND];
+            }
+
+            // Set focus to new row
+            this.cmdEntryDataGrid.Focus();
+            this.cmdEntryDataGrid.BeginEdit(false);
+
+        }
+
+        /// <summary>
+        /// Show CommandManagerWindow
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void commandsMenuItem_Click(object sender, EventArgs e)
+        {
+            CommandManagerWindow oCmdMngrWin = new CommandManagerWindow(this);
+            oCmdMngrWin.StartPosition = FormStartPosition.CenterParent;
+            oCmdMngrWin.ShowDialog(this);
+        }
+
+        /// <summary>
+        /// Main Key press handler
+        /// </summary>
+        /// <param name="msg"></param>
+        /// <param name="keyData"></param>
+        /// <returns></returns>
+        protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
+        {
+            // DO NOT ALLOW THE FOLLOWING KEYS
+            // [TAB]
+            // [PGUP/PGDN]
+            // [CONTROL]
+            if (keyData.Equals(Keys.Tab) ||
+                keyData.Equals(Keys.PageDown) ||
+                keyData.Equals(Keys.PageUp) ||
+                keyData.Equals(Keys.Escape) ||
+                keyData.ToString().Contains(Keys.Shift.ToString()) ||
+                keyData.ToString().Contains(Keys.Control.ToString()))
+                return true;
+
+
+            // HANDLE ENTER KEY (Process cmd)
+            if (keyData.Equals(Keys.Enter))
+            {
+                // Get cell value
+                String cmdName = (this.cmdEntryDataGrid.CurrentCell.EditedFormattedValue == null) ? "" : this.cmdEntryDataGrid.CurrentCell.EditedFormattedValue.ToString();
+
+                // Execute Command
+                string runCmdReturnString = "";
+                CommandGridAttributes.RowType nextRowRowType;
+                cmdProc.executeCmd(new ECommand(cmdName), out nextRowRowType, out runCmdReturnString);
+                createNewRow(nextRowRowType, runCmdReturnString);
+       
+                return true;
+            }
+
+            //    // HANDLE UP/DOWN ARROW KEYS (Buffer)
+            //    if (keyData.Equals(Keys.Up) || keyData.Equals(Keys.Down))
+            //    {
+            //        if (cmdBufferList.Count == 0)
+            //            return true;
+
+            //        if (keyData.Equals(Keys.Up))
+            //        {
+            //            if (cmdBufferIndex == 0)
+            //                cmdBufferIndex = cmdBufferList.Count;
+            //            cmdBufferIndex--;
+            //        }
+            //        else if (keyData.Equals(Keys.Down))
+            //        {
+            //            if (cmdBufferIndex == cmdBufferList.Count)
+            //                cmdBufferIndex = 0;
+            //            cmdBufferIndex++;
+            //        }
+            //        this.dataGridViewMain.Rows[this.dataGridViewMain.CurrentCell.RowIndex].Cells[COL_COMMAND].Value = "test";// cmdBufferList[cmdBufferIndex].ToString();
+            //        return true;
+            //    }
+
+            return base.ProcessCmdKey(ref msg, keyData);
+        }
 
         #region UI SETUP  >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
         /// <summary>
@@ -98,6 +278,7 @@ namespace CommandCentral.CC_UI
             defaultCellStyle.ForeColor = this.ForeColor;
             defaultCellStyle.SelectionBackColor = Color.FromArgb(60, 60, 60);
             defaultCellStyle.SelectionForeColor = Color.White;
+            defaultCellStyle.Font = new Font(Lib.APP_FONT, 8.25F, FontStyle.Regular, GraphicsUnit.Point, ((byte)(0)));
 
             this.cmdEntryDataGrid.DefaultCellStyle = defaultCellStyle;
         }
@@ -107,6 +288,11 @@ namespace CommandCentral.CC_UI
         /// </summary>
         private void InitializeCustomInterface()
         {
+            this.Font = new Font(Lib.APP_FONT, 8.25F, FontStyle.Regular, GraphicsUnit.Point, ((byte)(0)));
+            this.cmdsListLabel.Font = new Font(Lib.APP_FONT, 8.00F, FontStyle.Bold, GraphicsUnit.Point, ((byte)(0)));
+            this.cmdsListLabel.ForeColor = Color.Gold;
+            this.cmdsListTextArea.Font = new Font(Lib.APP_FONT, 8.00F, FontStyle.Bold, GraphicsUnit.Point, ((byte)(0)));
+
             AppRegistry oAppReg = new AppRegistry();
 
             this.setAppColours(oAppReg.getKeyValue(AppRegistry.CCKeys.BackColor), oAppReg.getKeyValue(AppRegistry.CCKeys.ForeColor));
@@ -271,171 +457,6 @@ namespace CommandCentral.CC_UI
 
         #endregion
 
-        /// <summary>
-        /// Clears the grid
-        /// </summary>
-        public void clearScreen()
-        {
-            this.cmdEntryDataGrid.Rows.Clear();
-        }
-
-        /// <summary>
-        /// Loads/refreshes the CommandsList
-        /// </summary>
-        public void refreshCommandsList()
-        {
-            ECommandsList cmdsList = new ECommandsList();
-            if (cmdsList.getCommandsList().Count == 0)
-                return;
-
-            this.cmdsListTextArea.Text = "";
-            for (int i = 0; i < cmdsList.getCommandsList().Count; i++)
-                this.cmdsListTextArea.Text += cmdsList.getCommandsList()[i].CmdName + "\r\n";
-        }
-
-        /// <summary>
-        /// Handles adding new rows to the grid
-        /// </summary>
-        private void createNewRow(CommandGridAttributes.RowType rowType, string newRowValue = "")
-        {
-            string marginValue = Lib.MARGIN_CHAR_DEFAULT;
-
-            // Format row we are leaving
-            if (this.cmdEntryDataGrid.RowCount > 0)
-            {
-                this.cmdEntryDataGrid.CurrentCell = this.cmdEntryDataGrid.Rows[cmdEntryDataGrid.RowCount - 1].Cells[CommandGridAttributes.Columns.COL_COMMAND];
-
-                if (rowType.Equals(CommandGridAttributes.RowType.Error))
-                    this.cmdEntryDataGrid.CurrentCell.Style.ForeColor = Color.Gray;
-                else if (rowType.Equals(CommandGridAttributes.RowType.Success))
-                    this.cmdEntryDataGrid.CurrentCell.Style.ForeColor = Color.White;
-            }
-
-            // Add new row
-            int newRowID;
-            this.cmdEntryDataGrid.Rows.Add();
-            newRowID = cmdEntryDataGrid.RowCount - 1;
-            this.cmdEntryDataGrid.Rows[newRowID].Cells[CommandGridAttributes.Columns.COL_MARGIN].Value = marginValue;
-
-            // Set newRowValue - multi line
-            if (newRowValue.Contains(Lib.NL))
-            {
-                // handle mutli line value
-                string currRowValue = "";
-                for (int i = 0; i < newRowValue.Length; i++)
-                {
-                    if (newRowValue[i].ToString().Equals(Lib.NL))
-                    {
-                        this.cmdEntryDataGrid.CurrentCell = this.cmdEntryDataGrid.Rows[newRowID].Cells[CommandGridAttributes.Columns.COL_COMMAND];
-                        this.cmdEntryDataGrid.CurrentCell.Value = currRowValue;
-                        this.cmdEntryDataGrid.Rows.Add();
-                        newRowID = cmdEntryDataGrid.RowCount - 1;
-                        currRowValue = "";
-                    }
-                    else
-                        currRowValue += newRowValue[i];
-                }
-            }
-            else
-            {
-                // Set newRowValue - single line
-                this.cmdEntryDataGrid.CurrentCell = this.cmdEntryDataGrid.Rows[newRowID].Cells[CommandGridAttributes.Columns.COL_COMMAND];
-                this.cmdEntryDataGrid.CurrentCell.Value = newRowValue;
-
-                // Color code
-                if (newRowValue.Equals(Lib.FIRST_LINE_VALUE))
-                    this.cmdEntryDataGrid.CurrentCell.Style.ForeColor = Color.LimeGreen;
-            }
-
-            // Set focus to new row
-            this.cmdEntryDataGrid.Focus();
-            this.cmdEntryDataGrid.BeginEdit(false);
-
-            // Add entry row if text was written to user
-            if (newRowValue.Length > 0)
-            {
-                this.cmdEntryDataGrid.Rows.Add();
-                this.cmdEntryDataGrid.Rows[cmdEntryDataGrid.RowCount - 1].Cells[CommandGridAttributes.Columns.COL_MARGIN].Value = marginValue;
-                this.cmdEntryDataGrid.CurrentCell = this.cmdEntryDataGrid.Rows[cmdEntryDataGrid.RowCount - 1].Cells[CommandGridAttributes.Columns.COL_COMMAND];
-                this.cmdEntryDataGrid.Focus();
-                this.cmdEntryDataGrid.BeginEdit(false);
-            }
-
-        }
-
-        /// <summary>
-        /// Show CommandManagerWindow
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void commandsMenuItem_Click(object sender, EventArgs e)
-        {
-            CommandManagerWindow oCmdMngrWin = new CommandManagerWindow(this);
-            oCmdMngrWin.StartPosition = FormStartPosition.CenterParent;
-            oCmdMngrWin.ShowDialog(this);
-        }
-
-        /// <summary>
-        /// Main Key press handler
-        /// </summary>
-        /// <param name="msg"></param>
-        /// <param name="keyData"></param>
-        /// <returns></returns>
-        protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
-        {
-            // DO NOT ALLOW THE FOLLOWING KEYS
-            // [TAB]
-            // [PGUP/PGDN]
-            // [CONTROL]
-            if (keyData.Equals(Keys.Tab) ||
-                keyData.Equals(Keys.PageDown) ||
-                keyData.Equals(Keys.PageUp) ||
-                keyData.Equals(Keys.Escape) ||
-                keyData.ToString().Contains(Keys.Shift.ToString()) ||
-                keyData.ToString().Contains(Keys.Control.ToString()))
-                return true;
-
-
-            // HANDLE ENTER KEY (Process cmd)
-            if (keyData.Equals(Keys.Enter))
-            {
-                // Get cell value
-                String cmdName = (this.cmdEntryDataGrid.CurrentCell.EditedFormattedValue == null) ? "" : this.cmdEntryDataGrid.CurrentCell.EditedFormattedValue.ToString();
-
-                // Execute Command
-                string runCmdReturnString = "";
-                if (cmdProc.executeCmd(new ECommand(cmdName), out runCmdReturnString))
-                    createNewRow(CommandGridAttributes.RowType.Success, runCmdReturnString);
-                else
-                    createNewRow(CommandGridAttributes.RowType.Error, runCmdReturnString);
-
-                return true;
-            }
-
-            //    // HANDLE UP/DOWN ARROW KEYS (Buffer)
-            //    if (keyData.Equals(Keys.Up) || keyData.Equals(Keys.Down))
-            //    {
-            //        if (cmdBufferList.Count == 0)
-            //            return true;
-
-            //        if (keyData.Equals(Keys.Up))
-            //        {
-            //            if (cmdBufferIndex == 0)
-            //                cmdBufferIndex = cmdBufferList.Count;
-            //            cmdBufferIndex--;
-            //        }
-            //        else if (keyData.Equals(Keys.Down))
-            //        {
-            //            if (cmdBufferIndex == cmdBufferList.Count)
-            //                cmdBufferIndex = 0;
-            //            cmdBufferIndex++;
-            //        }
-            //        this.dataGridViewMain.Rows[this.dataGridViewMain.CurrentCell.RowIndex].Cells[COL_COMMAND].Value = "test";// cmdBufferList[cmdBufferIndex].ToString();
-            //        return true;
-            //    }
-
-            return base.ProcessCmdKey(ref msg, keyData);
-        }
 
     }
 }

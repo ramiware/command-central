@@ -29,7 +29,7 @@ namespace CommandCentral.CC_CoreObjects
         /// Handles internal and external command execution
         /// </summary>
         /// <returns></returns>
-        public bool executeCmd(ECommand cmd, out string runCmdReturnString)
+        public bool executeCmd(ECommand cmd, out CommandGridAttributes.RowType nextRowRowType, out string runCmdReturnString)
         {
             try
             {
@@ -39,19 +39,13 @@ namespace CommandCentral.CC_CoreObjects
                 if (cmd.CmdName.Trim().Length == 0)
                 {
                     runCmdReturnString = "";
+                    nextRowRowType = CommandGridAttributes.RowType.Blank;
                     return true;
                 }
 
                 // ----------------------------------------------------
-                // DISPLAY HELP
+                // DISPLAY INTERNAL COMMANDS
                 // ----------------------------------------------------
-                // help - display help text
-                if (cmd.CmdName.Equals("help", StringComparison.CurrentCultureIgnoreCase))
-                {
-                    runCmdReturnString = "Try a cmd from the Commands List " + Lib.NL +
-                                         "or try /i for a list of Internal Commands." + Lib.NL;
-                    return true;
-                }
 
                 // /i - display internal commands
                 if (cmd.CmdName.Equals("/i", StringComparison.CurrentCultureIgnoreCase))
@@ -61,6 +55,7 @@ namespace CommandCentral.CC_CoreObjects
                     for (int i = 0; i < oICommandsList.getCommandsList().Count; i++)
                         runCmdReturnString += "[" + oICommandsList.getCommandsList()[i].CmdName + "]" + Lib.NL + oICommandsList.getCommandsList()[i].CmdDesc + Lib.NL;
 
+                    nextRowRowType = CommandGridAttributes.RowType.InfoMsg;
                     return true;
                 }
 
@@ -69,9 +64,9 @@ namespace CommandCentral.CC_CoreObjects
                 // ----------------------------------------------------
                 for (int i = 0; i < oICommandsList.getCommandsList().Count; i++)
                 {
-                    if (cmd.CmdName.Equals(oICommandsList.getCommandsList()[i].CmdName, StringComparison.CurrentCultureIgnoreCase))
+                    if (cmd.CmdName.Equals(oICommandsList.getCommandsList()[i].CmdName))
                     {
-                        processInternalCmd(cmd.CmdName, out runCmdReturnString);
+                        processInternalCmd(cmd.CmdName, out nextRowRowType, out runCmdReturnString);
                         return true;
                     }
                 }
@@ -79,22 +74,86 @@ namespace CommandCentral.CC_CoreObjects
                 // ----------------------------------------------------
                 // EXTERNAL COMMAND?
                 // ----------------------------------------------------
-                // Validate RunCmd
-                if (cmd.RunCmd == null || cmd.RunCmd.Length == 0)
-                {
-                    runCmdReturnString = "Command not found.  Try 'help'.";
-                    return false;
-                }
-
-                // Run custom/external command
-                Process thisProcess = Process.Start(cmd.RunCmd);
-                runCmdReturnString = "Executing...";
+                processExternalCmd(cmd.CmdName, out nextRowRowType, out runCmdReturnString);
                 return true;
 
             }
             catch (Exception e)
             {
-                runCmdReturnString = "Command failed.  Try 'help'.";
+                runCmdReturnString = "Command failed. " + Lib.NL +
+                                     "Try a cmd from the Commands List " + Lib.NL +
+                                     "or try /i for a list of Internal Commands." + Lib.NL;
+                nextRowRowType = CommandGridAttributes.RowType.ErrorMsg;
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="runCmd"></param>
+        /// <param name="nextRowRowType"></param>
+        /// <param name="runCmdReturnString"></param>
+        /// <returns></returns>
+        private bool processExternalCmd(string cmdName, out CommandGridAttributes.RowType nextRowRowType, out string runCmdReturnString)
+        {
+            // Validate cmdName
+            if (cmdName == null || cmdName.Length == 0)
+            {
+                runCmdReturnString = "";
+                nextRowRowType = CommandGridAttributes.RowType.ReadyForInput;
+                return false;
+            }
+
+            // Get RunCmd using CmdName
+            string cmdNameValue = (!cmdName.Contains(" ")) ? cmdName : cmdName.Substring(0, cmdName.IndexOf(" "));
+            string cmdParmsValue = (!cmdName.Contains(" ")) ? "" : cmdName.Substring(cmdName.IndexOf(" ")+1);
+            ECommand eCmd = new ECommand(cmdNameValue);
+
+              
+            // Validate RunCmd
+            if (eCmd.RunCmd == null || eCmd.RunCmd.Length == 0)
+            {
+                runCmdReturnString = "Command not found. " + Lib.NL +
+                                     "Try a cmd from the Commands List " + Lib.NL +
+                                     "or try /i for a list of Internal Commands." + Lib.NL;
+                nextRowRowType = CommandGridAttributes.RowType.ErrorMsg;
+                return false;
+            }
+
+            try
+            {
+                // Attempt to run external cmd
+                Process cmdProcess;
+
+                // Run without parms
+                if (cmdParmsValue.Length == 0)
+                {
+                    cmdProcess = Process.Start(eCmd.RunCmd);
+                    runCmdReturnString = "Executing...";
+                    nextRowRowType = CommandGridAttributes.RowType.InfoMsg;
+                    return true;
+                }
+                // Run with parms
+                if (cmdParmsValue.Length > 0)
+                {
+                    cmdProcess = Process.Start(eCmd.RunCmd, cmdParmsValue);
+                    runCmdReturnString = "Executing...";
+                    nextRowRowType = CommandGridAttributes.RowType.InfoMsg;
+                    return true;
+                }
+
+                // All other cases
+                runCmdReturnString = "";
+                nextRowRowType = CommandGridAttributes.RowType.ReadyForInput;
+                return true;
+            }
+            catch (Exception e)
+            {
+                runCmdReturnString = "Command failed. " + Lib.NL +
+                                     "Try a cmd from the Commands List " + Lib.NL +
+                                     "or try /i for a list of Internal Commands." + Lib.NL;
+                nextRowRowType = CommandGridAttributes.RowType.ErrorMsg;
                 return false;
             }
         }
@@ -103,13 +162,13 @@ namespace CommandCentral.CC_CoreObjects
         /// processes internal commands
         /// </summary>
         /// <param name="cmdName"></param>
-        private void processInternalCmd(string cmdName, out string runCmdReturnString)
+        private void processInternalCmd(string cmdName, out CommandGridAttributes.RowType nextRowRowType, out string runCmdReturnString)
         {
             // Is this an actual internal command?
             bool internalCmdFound = false;
             for (int i = 0; i < oICommandsList.getCommandsList().Count; i++)
             {
-                if (cmdName.Equals(oICommandsList.getCommandsList()[i].CmdName, StringComparison.CurrentCultureIgnoreCase))
+                if (cmdName.Equals(oICommandsList.getCommandsList()[i].CmdName))
                 {
                     internalCmdFound = true;
                     break;
@@ -117,11 +176,12 @@ namespace CommandCentral.CC_CoreObjects
             }
 
             runCmdReturnString = "";
+            nextRowRowType = CommandGridAttributes.RowType.ReadyForInput;
             if (!internalCmdFound)
                 return;
 
             // mngcmds
-            if (cmdName.Equals("cmdmngr", StringComparison.CurrentCultureIgnoreCase))
+            if (cmdName.Equals("cmdmngr"))
             {
                 CommandManagerWindow oCmdMngrWin = new CommandManagerWindow(oCmdWin);
                 oCmdMngrWin.StartPosition = FormStartPosition.CenterParent;
@@ -129,14 +189,15 @@ namespace CommandCentral.CC_CoreObjects
             }
 
             // clear
-            if (cmdName.Equals("clear", StringComparison.CurrentCultureIgnoreCase))
+            if (cmdName.Equals("clear"))
             {
                 runCmdReturnString = Lib.FIRST_LINE_VALUE;
+                nextRowRowType = CommandGridAttributes.RowType.InfoMsg;
                 oCmdWin.clearScreen();
             }
 
             // exit script
-            if (cmdName.Equals("exit", StringComparison.CurrentCultureIgnoreCase))
+            if (cmdName.Equals("exit"))
                 Application.Exit();
 
         }

@@ -53,7 +53,7 @@ namespace CommandCentral.CC_CoreObjects
             var other = obj as ECommand;
             if (other == null)
                 return false;
-            return other.CmdName == this.CmdName && other.RunCmd == this.RunCmd;
+            return other.CmdName.ToUpper() == this.CmdName.ToUpper() && other.RunCmd == this.RunCmd;
         }
         public override int GetHashCode()
         {

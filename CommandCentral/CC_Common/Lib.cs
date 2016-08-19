@@ -14,5 +14,7 @@ namespace CommandCentral.CC_Common
         public static string MARGIN_CHAR_MESSAGE = "";
 
         public static string NL = "ﻥ";
+
+        public static string APP_FONT = "Consolas";
     }
 }
