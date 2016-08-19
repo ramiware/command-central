@@ -44,6 +44,17 @@ namespace CommandCentral.CC_CoreObjects
                 }
 
                 // ----------------------------------------------------
+                // DISPLAY HELP
+                // ----------------------------------------------------
+                if (cmd.CmdName.Trim().Equals("help", StringComparison.CurrentCultureIgnoreCase))
+                {
+                    runCmdReturnString = Lib.TEXT_TRY_ICOMMAND_LINE1OF2 + Lib.NL + Lib.TEXT_TRY_ICOMMAND_LINE2OF2 + Lib.NL;
+                    nextRowRowType = CommandGridAttributes.RowType.InfoMsg;
+                    return true;
+                }
+
+
+                // ----------------------------------------------------
                 // DISPLAY INTERNAL COMMANDS
                 // ----------------------------------------------------
 
@@ -74,15 +85,40 @@ namespace CommandCentral.CC_CoreObjects
                 // ----------------------------------------------------
                 // EXTERNAL COMMAND?
                 // ----------------------------------------------------
-                processExternalCmd(cmd.CmdName, out nextRowRowType, out runCmdReturnString);
-                return true;
+                if (!processExternalCmd(cmd.CmdName, out nextRowRowType, out runCmdReturnString))
+                    return tryProcessNativeCmd(cmd.CmdName, out nextRowRowType, out runCmdReturnString);
+                else 
+                    return true;
 
             }
             catch (Exception e)
             {
-                runCmdReturnString = "Command failed. " + Lib.NL +
-                                     "Try a cmd from the Commands List " + Lib.NL +
-                                     "or try /i for a list of Internal Commands." + Lib.NL;
+                runCmdReturnString = "Command failed. Try help.";
+                nextRowRowType = CommandGridAttributes.RowType.ErrorMsg;
+                return false;
+            }
+        }
+
+        private bool tryProcessNativeCmd(string cmdName, out CommandGridAttributes.RowType nextRowRowType, out string runCmdReturnString)
+        {
+            // Validate cmdName
+            if (cmdName == null || cmdName.Length == 0)
+            {
+                runCmdReturnString = "";
+                nextRowRowType = CommandGridAttributes.RowType.ReadyForInput;
+                return false;
+            }
+
+            try
+            {
+                Process cmdProcess = Process.Start(cmdName);
+                runCmdReturnString = "Executing...";
+                nextRowRowType = CommandGridAttributes.RowType.InfoMsg;
+                return true;
+            }
+            catch (Exception e)
+            {
+                runCmdReturnString = "Command failed. Try help.";
                 nextRowRowType = CommandGridAttributes.RowType.ErrorMsg;
                 return false;
             }
@@ -114,9 +150,7 @@ namespace CommandCentral.CC_CoreObjects
             // Validate RunCmd
             if (eCmd.RunCmd == null || eCmd.RunCmd.Length == 0)
             {
-                runCmdReturnString = "Command not found. " + Lib.NL +
-                                     "Try a cmd from the Commands List " + Lib.NL +
-                                     "or try /i for a list of Internal Commands." + Lib.NL;
+                runCmdReturnString = "Command not found. Try help.";
                 nextRowRowType = CommandGridAttributes.RowType.ErrorMsg;
                 return false;
             }
@@ -150,9 +184,7 @@ namespace CommandCentral.CC_CoreObjects
             }
             catch (Exception e)
             {
-                runCmdReturnString = "Command failed. " + Lib.NL +
-                                     "Try a cmd from the Commands List " + Lib.NL +
-                                     "or try /i for a list of Internal Commands." + Lib.NL;
+                runCmdReturnString = "Command failed. Try help.";
                 nextRowRowType = CommandGridAttributes.RowType.ErrorMsg;
                 return false;
             }
