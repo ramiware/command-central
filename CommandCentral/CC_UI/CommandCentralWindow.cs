@@ -26,7 +26,6 @@ namespace CommandCentral.CC_UI
         /// </summary>
         public CommandCentralWindow()
         {
-
             // Initailize UI
             Application.EnableVisualStyles();
             InitializeComponent();
@@ -54,24 +53,7 @@ namespace CommandCentral.CC_UI
             cmdsListLabel.ContextMenuStrip = ccContextMenuStrip;
             headerLabel.ContextMenuStrip = ccContextMenuStrip;
 
-
         }
-
-        /// <summary>
-        /// Initialize first row
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void CommandCentralWindow_Shown(object sender, EventArgs e)
-        {
-            initFirstRow();
-        }
-        private void initFirstRow()
-        {
-            // INITIALIZE THE FIRST ROW
-            createNewRow(CommandProcessor.ReturnType.InfoMsg, Lib.FIRST_LINE_VALUE);
-        }
-
 
         /// <summary>
         /// Clears the grid
@@ -93,6 +75,16 @@ namespace CommandCentral.CC_UI
             this.cmdsListTextArea.Text = "";
             for (int i = 0; i < cmdsList.getCommandsList().Count; i++)
                 this.cmdsListTextArea.Text += cmdsList.getCommandsList()[i].CmdName + "\r\n";
+        }
+
+        /// <summary>
+        /// Initialize first row
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void CommandCentralWindow_Shown(object sender, EventArgs e)
+        {
+            createNewRow(CommandProcessor.ReturnType.InfoMsg, Lib.FIRST_LINE_VALUE);
         }
 
         /// <summary>
@@ -196,7 +188,7 @@ namespace CommandCentral.CC_UI
         }
 
         /// <summary>
-        /// Main Key press handler
+        /// Main Key press handler - what is and is not allowed on the UI side
         /// </summary>
         /// <param name="msg"></param>
         /// <param name="keyData"></param>
@@ -215,6 +207,9 @@ namespace CommandCentral.CC_UI
                 keyData.ToString().Contains(Keys.Control.ToString()))
                 return true;
 
+            // ENSURE WE ARE IN THE LAST ROW
+            if (this.cmdEntryDataGrid.CurrentCell.RowIndex != this.cmdEntryDataGrid.Rows.Count - 1)
+                this.cmdEntryDataGrid.CurrentCell = this.cmdEntryDataGrid.Rows[cmdEntryDataGrid.RowCount - 1].Cells[CommandGridAttributes.Columns.COL_COMMAND];
 
             // HANDLE ENTER KEY (Process cmd)
             if (keyData.Equals(Keys.Enter))
@@ -238,18 +233,35 @@ namespace CommandCentral.CC_UI
             // HANDLE UP/DOWN ARROW KEYS (Buffer)
             if (keyData.Equals(Keys.Up) || keyData.Equals(Keys.Down))
             {
+                // ensure we are in the last row, command column
+                if (this.cmdEntryDataGrid.CurrentCell.RowIndex != this.cmdEntryDataGrid.Rows.Count - 1 || this.cmdEntryDataGrid.CurrentCell.ColumnIndex != this.cmdEntryDataGrid.Columns.Count - 1)
+                {
+                    this.cmdEntryDataGrid.Rows[this.cmdEntryDataGrid.Rows.Count - 1].Selected = true;
+                    this.cmdEntryDataGrid.CurrentCell = this.cmdEntryDataGrid.Rows[cmdEntryDataGrid.RowCount - 1].Cells[CommandGridAttributes.Columns.COL_COMMAND];
+                    this.cmdEntryDataGrid.BeginEdit(true);
+                }
+
                 if (keyData.Equals(Keys.Up))
                 {
                     this.cmdEntryDataGrid.CurrentCell.Value = cmdBuffer.getPreviousEntry();
-                    MessageBox.Show("Figure out how to display value. Currently it will show if you hit enter");
+                    this.cmdEntryDataGrid.RefreshEdit();
+                    SendKeys.Send("{RIGHT}");
+
                 }
                 else if (keyData.Equals(Keys.Down))
                 {
                     this.cmdEntryDataGrid.CurrentCell.Value = cmdBuffer.getNextEntry();
+                    this.cmdEntryDataGrid.RefreshEdit();
+                    SendKeys.Send("{RIGHT}");
                 }
-                
+
                 return true;
             }
+
+            // HANDLE LEFT/RIGHT ARROW KEYS
+            if (keyData.Equals(Keys.Left))
+                return true;
+
 
             return base.ProcessCmdKey(ref msg, keyData);
         }
@@ -434,7 +446,7 @@ namespace CommandCentral.CC_UI
         #endregion --------------------------------------------------------------------------------------------------------
 
         
-        #region MOUSE HANDLERS >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+        #region GRID HANDLERS >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
         /// <summary>
         /// If the Commands List panel is clicked on, sets focus back to the cmdEntryDataGrid
         /// </summary>
@@ -462,9 +474,19 @@ namespace CommandCentral.CC_UI
             }
         }
 
+
+        /// <summary>
+        /// Kicks the user out of the cell if it is not the last cell
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void cmdEntryDataGrid_CellEnter(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.ColumnIndex != 1 || e.RowIndex != this.cmdEntryDataGrid.Rows.Count - 1)
+                SendKeys.Send("{Tab}");
+        }
+
         #endregion
-
-
 
     }
 }

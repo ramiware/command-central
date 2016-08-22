@@ -124,7 +124,7 @@
             dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
             dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
             this.cmdEntryDataGrid.DefaultCellStyle = dataGridViewCellStyle1;
-            this.cmdEntryDataGrid.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically;
+            this.cmdEntryDataGrid.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnKeystroke;
             this.cmdEntryDataGrid.GridColor = System.Drawing.Color.Yellow;
             this.cmdEntryDataGrid.ImeMode = System.Windows.Forms.ImeMode.NoControl;
             this.cmdEntryDataGrid.Location = new System.Drawing.Point(0, 0);
@@ -139,6 +139,7 @@
             this.cmdEntryDataGrid.TabIndex = 0;
             this.cmdEntryDataGrid.TabStop = false;
             this.cmdEntryDataGrid.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.cmdEntryDataGrid_CellClick);
+            this.cmdEntryDataGrid.CellEnter += new System.Windows.Forms.DataGridViewCellEventHandler(this.cmdEntryDataGrid_CellEnter);
             // 
             // panelMainArea
             // 
