@@ -45,6 +45,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CC_Common\Lib.cs" />
+    <Compile Include="CC_CoreObjects\CommandBuffer.cs" />
     <Compile Include="CC_CoreObjects\CommandObject.cs" />
     <Compile Include="CC_CoreObjects\ECommand.cs" />
     <Compile Include="CC_CoreObjects\CommandProcessor.cs" />

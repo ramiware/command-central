@@ -18,7 +18,8 @@ namespace CommandCentral.CC_UI
     public partial class CommandCentralWindow : Form
     {
 
-        CommandProcessor cmdProc;
+        private CommandProcessor cmdProc;
+        private CommandBuffer cmdBuffer;
 
         /// <summary>
         /// 
@@ -42,6 +43,9 @@ namespace CommandCentral.CC_UI
 
             // CommandProcessor
             cmdProc = new CommandProcessor(this);
+
+            // Command Buffer
+            cmdBuffer = new CommandBuffer();
 
             // Context Menu
             cmdEntryDataGrid.ContextMenuStrip = ccContextMenuStrip;
@@ -218,6 +222,10 @@ namespace CommandCentral.CC_UI
                 // Get cell value
                 String cmdName = (this.cmdEntryDataGrid.CurrentCell.EditedFormattedValue == null) ? "" : this.cmdEntryDataGrid.CurrentCell.EditedFormattedValue.ToString();
 
+                // Add to buffer
+                if (cmdName.Length > 0)
+                    cmdBuffer.addEntry(cmdName);
+
                 // Execute Command
                 string runCmdReturnString = "";
                 CommandProcessor.ReturnType runCmdReturnType;
@@ -227,27 +235,21 @@ namespace CommandCentral.CC_UI
                 return true;
             }
 
-            //    // HANDLE UP/DOWN ARROW KEYS (Buffer)
-            //    if (keyData.Equals(Keys.Up) || keyData.Equals(Keys.Down))
-            //    {
-            //        if (cmdBufferList.Count == 0)
-            //            return true;
-
-            //        if (keyData.Equals(Keys.Up))
-            //        {
-            //            if (cmdBufferIndex == 0)
-            //                cmdBufferIndex = cmdBufferList.Count;
-            //            cmdBufferIndex--;
-            //        }
-            //        else if (keyData.Equals(Keys.Down))
-            //        {
-            //            if (cmdBufferIndex == cmdBufferList.Count)
-            //                cmdBufferIndex = 0;
-            //            cmdBufferIndex++;
-            //        }
-            //        this.dataGridViewMain.Rows[this.dataGridViewMain.CurrentCell.RowIndex].Cells[COL_COMMAND].Value = "test";// cmdBufferList[cmdBufferIndex].ToString();
-            //        return true;
-            //    }
+            // HANDLE UP/DOWN ARROW KEYS (Buffer)
+            if (keyData.Equals(Keys.Up) || keyData.Equals(Keys.Down))
+            {
+                if (keyData.Equals(Keys.Up))
+                {
+                    this.cmdEntryDataGrid.CurrentCell.Value = cmdBuffer.getPreviousEntry();
+                    MessageBox.Show("Figure out how to display value. Currently it will show if you hit enter");
+                }
+                else if (keyData.Equals(Keys.Down))
+                {
+                    this.cmdEntryDataGrid.CurrentCell.Value = cmdBuffer.getNextEntry();
+                }
+                
+                return true;
+            }
 
             return base.ProcessCmdKey(ref msg, keyData);
         }
@@ -461,6 +463,7 @@ namespace CommandCentral.CC_UI
         }
 
         #endregion
+
 
 
     }
