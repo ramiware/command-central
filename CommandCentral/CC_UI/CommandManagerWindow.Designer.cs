@@ -75,7 +75,7 @@
             // 
             // closeButton
             // 
-            this.closeButton.Location = new System.Drawing.Point(269, 357);
+            this.closeButton.Location = new System.Drawing.Point(368, 357);
             this.closeButton.Name = "closeButton";
             this.closeButton.Size = new System.Drawing.Size(75, 23);
             this.closeButton.TabIndex = 6;
@@ -92,7 +92,7 @@
             this.cmdTabControl.Location = new System.Drawing.Point(12, 25);
             this.cmdTabControl.Name = "cmdTabControl";
             this.cmdTabControl.SelectedIndex = 0;
-            this.cmdTabControl.Size = new System.Drawing.Size(332, 326);
+            this.cmdTabControl.Size = new System.Drawing.Size(435, 326);
             this.cmdTabControl.TabIndex = 5;
             this.cmdTabControl.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.cmdControl_KeyPress);
             // 
@@ -109,14 +109,14 @@
             this.addPage.Location = new System.Drawing.Point(4, 22);
             this.addPage.Name = "addPage";
             this.addPage.Padding = new System.Windows.Forms.Padding(3);
-            this.addPage.Size = new System.Drawing.Size(324, 300);
+            this.addPage.Size = new System.Drawing.Size(427, 300);
             this.addPage.TabIndex = 1;
             this.addPage.Text = "Add";
             this.addPage.UseVisualStyleBackColor = true;
             // 
             // addTab_BrowseFolderButton
             // 
-            this.addTab_BrowseFolderButton.Location = new System.Drawing.Point(103, 143);
+            this.addTab_BrowseFolderButton.Location = new System.Drawing.Point(90, 89);
             this.addTab_BrowseFolderButton.Name = "addTab_BrowseFolderButton";
             this.addTab_BrowseFolderButton.Size = new System.Drawing.Size(75, 23);
             this.addTab_BrowseFolderButton.TabIndex = 5;
@@ -126,7 +126,7 @@
             // 
             // addTab_BrowseFileButton
             // 
-            this.addTab_BrowseFileButton.Location = new System.Drawing.Point(22, 143);
+            this.addTab_BrowseFileButton.Location = new System.Drawing.Point(9, 89);
             this.addTab_BrowseFileButton.Name = "addTab_BrowseFileButton";
             this.addTab_BrowseFileButton.Size = new System.Drawing.Size(75, 23);
             this.addTab_BrowseFileButton.TabIndex = 4;
@@ -137,25 +137,25 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(19, 54);
+            this.label5.Location = new System.Drawing.Point(6, 136);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(38, 13);
+            this.label5.Size = new System.Drawing.Size(260, 13);
             this.label5.TabIndex = 5;
-            this.label5.Text = "Name:";
+            this.label5.Text = "Name (keyword that will launch the above command):";
             // 
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(19, 101);
+            this.label4.Location = new System.Drawing.Point(6, 49);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(57, 13);
+            this.label4.Size = new System.Drawing.Size(318, 13);
             this.label4.TabIndex = 4;
-            this.label4.Text = "Command:";
+            this.label4.Text = "Command (Enter the full path of file or folder - exe, bat, folder, etc):";
             // 
             // addTab_AddButton
             // 
             this.addTab_AddButton.Enabled = false;
-            this.addTab_AddButton.Location = new System.Drawing.Point(231, 143);
+            this.addTab_AddButton.Location = new System.Drawing.Point(333, 178);
             this.addTab_AddButton.Name = "addTab_AddButton";
             this.addTab_AddButton.Size = new System.Drawing.Size(75, 23);
             this.addTab_AddButton.TabIndex = 3;
@@ -166,17 +166,17 @@
             // addTab_RunCmdTextBox
             // 
             this.addTab_RunCmdTextBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.addTab_RunCmdTextBox.Location = new System.Drawing.Point(22, 117);
+            this.addTab_RunCmdTextBox.Location = new System.Drawing.Point(9, 65);
             this.addTab_RunCmdTextBox.Name = "addTab_RunCmdTextBox";
-            this.addTab_RunCmdTextBox.Size = new System.Drawing.Size(284, 18);
+            this.addTab_RunCmdTextBox.Size = new System.Drawing.Size(399, 18);
             this.addTab_RunCmdTextBox.TabIndex = 2;
             this.addTab_RunCmdTextBox.TextChanged += new System.EventHandler(this.addTab_RunCmdTextBox_TextChanged);
             // 
             // addTab_CmdNameTextBox
             // 
-            this.addTab_CmdNameTextBox.Location = new System.Drawing.Point(22, 70);
+            this.addTab_CmdNameTextBox.Location = new System.Drawing.Point(9, 152);
             this.addTab_CmdNameTextBox.Name = "addTab_CmdNameTextBox";
-            this.addTab_CmdNameTextBox.Size = new System.Drawing.Size(284, 20);
+            this.addTab_CmdNameTextBox.Size = new System.Drawing.Size(399, 20);
             this.addTab_CmdNameTextBox.TabIndex = 1;
             this.addTab_CmdNameTextBox.TextChanged += new System.EventHandler(this.addTab_CmdNameTextBox_TextChanged);
             // 
@@ -203,14 +203,14 @@
             this.editPage.Location = new System.Drawing.Point(4, 22);
             this.editPage.Name = "editPage";
             this.editPage.Padding = new System.Windows.Forms.Padding(3);
-            this.editPage.Size = new System.Drawing.Size(324, 300);
+            this.editPage.Size = new System.Drawing.Size(427, 300);
             this.editPage.TabIndex = 0;
             this.editPage.Text = "Edit";
             this.editPage.UseVisualStyleBackColor = true;
             // 
             // editTab_BrowseFolderButton
             // 
-            this.editTab_BrowseFolderButton.Location = new System.Drawing.Point(159, 105);
+            this.editTab_BrowseFolderButton.Location = new System.Drawing.Point(262, 105);
             this.editTab_BrowseFolderButton.Name = "editTab_BrowseFolderButton";
             this.editTab_BrowseFolderButton.Size = new System.Drawing.Size(75, 23);
             this.editTab_BrowseFolderButton.TabIndex = 4;
@@ -220,7 +220,7 @@
             // 
             // editTab_BrowseFileButton
             // 
-            this.editTab_BrowseFileButton.Location = new System.Drawing.Point(78, 105);
+            this.editTab_BrowseFileButton.Location = new System.Drawing.Point(181, 105);
             this.editTab_BrowseFileButton.Name = "editTab_BrowseFileButton";
             this.editTab_BrowseFileButton.Size = new System.Drawing.Size(75, 23);
             this.editTab_BrowseFileButton.TabIndex = 3;
@@ -239,7 +239,7 @@
             // 
             // editTab_SaveButton
             // 
-            this.editTab_SaveButton.Location = new System.Drawing.Point(243, 105);
+            this.editTab_SaveButton.Location = new System.Drawing.Point(346, 105);
             this.editTab_SaveButton.Name = "editTab_SaveButton";
             this.editTab_SaveButton.Size = new System.Drawing.Size(75, 23);
             this.editTab_SaveButton.TabIndex = 5;
@@ -252,7 +252,7 @@
             this.instructLabel1.Location = new System.Drawing.Point(6, 31);
             this.instructLabel1.Margin = new System.Windows.Forms.Padding(3);
             this.instructLabel1.Name = "instructLabel1";
-            this.instructLabel1.Size = new System.Drawing.Size(312, 31);
+            this.instructLabel1.Size = new System.Drawing.Size(415, 31);
             this.instructLabel1.TabIndex = 3;
             this.instructLabel1.Text = "Click on the command you want to edit from the listbox.  Enter the new command in" +
     " the textbox below, and click Save.";
@@ -262,7 +262,7 @@
             this.editTab_RunCmdTextBox.Font = new System.Drawing.Font("Tahoma", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.editTab_RunCmdTextBox.Location = new System.Drawing.Point(9, 81);
             this.editTab_RunCmdTextBox.Name = "editTab_RunCmdTextBox";
-            this.editTab_RunCmdTextBox.Size = new System.Drawing.Size(309, 18);
+            this.editTab_RunCmdTextBox.Size = new System.Drawing.Size(412, 18);
             this.editTab_RunCmdTextBox.TabIndex = 2;
             this.editTab_RunCmdTextBox.TextChanged += new System.EventHandler(this.editTab_RunCmdTextBox_TextChanged);
             // 
@@ -270,10 +270,10 @@
             // 
             this.editTab_CmdListBox.FormattingEnabled = true;
             this.editTab_CmdListBox.HorizontalScrollbar = true;
-            this.editTab_CmdListBox.Location = new System.Drawing.Point(9, 145);
+            this.editTab_CmdListBox.Location = new System.Drawing.Point(6, 145);
             this.editTab_CmdListBox.MultiColumn = true;
             this.editTab_CmdListBox.Name = "editTab_CmdListBox";
-            this.editTab_CmdListBox.Size = new System.Drawing.Size(309, 147);
+            this.editTab_CmdListBox.Size = new System.Drawing.Size(415, 147);
             this.editTab_CmdListBox.TabIndex = 1;
             this.editTab_CmdListBox.SelectedIndexChanged += new System.EventHandler(this.editTab_CmdListBox_SelectedIndexChanged);
             // 
@@ -298,7 +298,7 @@
             this.removePage.Location = new System.Drawing.Point(4, 22);
             this.removePage.Name = "removePage";
             this.removePage.Padding = new System.Windows.Forms.Padding(3);
-            this.removePage.Size = new System.Drawing.Size(324, 300);
+            this.removePage.Size = new System.Drawing.Size(427, 300);
             this.removePage.TabIndex = 2;
             this.removePage.Text = "Remove";
             this.removePage.UseVisualStyleBackColor = true;
@@ -314,7 +314,7 @@
             // 
             // removeTab_RemoveButton
             // 
-            this.removeTab_RemoveButton.Location = new System.Drawing.Point(243, 119);
+            this.removeTab_RemoveButton.Location = new System.Drawing.Point(346, 120);
             this.removeTab_RemoveButton.Name = "removeTab_RemoveButton";
             this.removeTab_RemoveButton.Size = new System.Drawing.Size(75, 23);
             this.removeTab_RemoveButton.TabIndex = 9;
@@ -327,7 +327,7 @@
             this.label10.Location = new System.Drawing.Point(6, 31);
             this.label10.Margin = new System.Windows.Forms.Padding(3);
             this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(312, 39);
+            this.label10.Size = new System.Drawing.Size(415, 39);
             this.label10.TabIndex = 8;
             this.label10.Text = "Click on the command you want to delete from the listbox.  Once you have verified" +
     " this is the command you want to remove, click Remove.";
@@ -340,7 +340,7 @@
             this.removeTab_RunCmdTextBox.Location = new System.Drawing.Point(9, 96);
             this.removeTab_RunCmdTextBox.Name = "removeTab_RunCmdTextBox";
             this.removeTab_RunCmdTextBox.ReadOnly = true;
-            this.removeTab_RunCmdTextBox.Size = new System.Drawing.Size(309, 18);
+            this.removeTab_RunCmdTextBox.Size = new System.Drawing.Size(412, 18);
             this.removeTab_RunCmdTextBox.TabIndex = 7;
             // 
             // removeTab_CmdListBox
@@ -350,7 +350,7 @@
             this.removeTab_CmdListBox.Location = new System.Drawing.Point(9, 119);
             this.removeTab_CmdListBox.MultiColumn = true;
             this.removeTab_CmdListBox.Name = "removeTab_CmdListBox";
-            this.removeTab_CmdListBox.Size = new System.Drawing.Size(215, 173);
+            this.removeTab_CmdListBox.Size = new System.Drawing.Size(331, 173);
             this.removeTab_CmdListBox.TabIndex = 2;
             this.removeTab_CmdListBox.SelectedIndexChanged += new System.EventHandler(this.removeTab_CmdListBox_SelectedIndexChanged);
             // 
@@ -417,7 +417,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(358, 385);
+            this.ClientSize = new System.Drawing.Size(459, 385);
             this.Controls.Add(this.closeButton);
             this.Controls.Add(this.cmdTabControl);
             this.Controls.Add(this.cmdMenu);

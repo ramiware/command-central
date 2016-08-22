@@ -75,6 +75,7 @@ namespace CommandCentral.CC_UI
             oParentForm.refreshCommandsList();
         }
 
+        #region ADD/REMOVE/EDIT
 
         /// <summary>
         /// Adds a new command
@@ -106,8 +107,6 @@ namespace CommandCentral.CC_UI
             MessageBox.Show("Command created successfully.", "New Command", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
         }
-
-
         /// <summary>
         /// Open File Dialog. Set selection to textbox
         /// </summary>
@@ -124,7 +123,6 @@ namespace CommandCentral.CC_UI
             }
 
         }
-
         /// <summary>
         /// Open Folder Dialog. Set selection to textbox
         /// </summary>
@@ -154,7 +152,6 @@ namespace CommandCentral.CC_UI
 
             this.removeTab_RunCmdTextBox.Text = selectedCommand.RunCmd;
         }
-
         /// <summary>
         /// Removes the selected Cmd
         /// </summary>
@@ -173,58 +170,85 @@ namespace CommandCentral.CC_UI
         }
 
 
-
-
-
-        /***********************************************************************
-         * Loads requested command in textbox
-         ***********************************************************************/
+        /// <summary>
+        /// Sets the RunCmd of the selected CmdName in the RunCmdTextBox
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void editTab_CmdListBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            //cmdTextBox.Text = oCmdsList.getProfileString("[COMMANDS]", this.cmdListBox.SelectedItem.ToString());
+            string selectedCmdName = this.editTab_CmdListBox.SelectedItem.ToString();
+            ECommand selectedCommand = new ECommand(selectedCmdName);
+
+            this.editTab_RunCmdTextBox.Text = selectedCommand.RunCmd;
         }
-
-
-        /***********************************************************************
-         * Saves the new command
-         ***********************************************************************/
-        private void editTab_SaveButton_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                //oCmdsList.setProfileString("[COMMANDS]", this.cmdListBox.SelectedItem.ToString(), cmdTextBox.Text);
-                MessageBox.Show("Changes saved successfully.", "Command Saved", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch
-            {
-                MessageBox.Show("Unable to save changes.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-
-
-        /***********************************************************************
-         * Open File Dialog. (EDIT)
-         ***********************************************************************/
+        /// <summary>
+        /// Open File Dialog. Set selection to textbox
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void editTab_BrowseFileButton_Click(object sender, EventArgs e)
         {
-            DialogResult fileResult = this.openFileEdit.ShowDialog();
+            DialogResult fileResult = this.openFileAdd.ShowDialog();
 
-            if (fileResult.ToString() == "OK")
-                this.editTab_RunCmdTextBox.Text = this.openFileEdit.FileName.ToString();
+            if (fileResult.Equals(DialogResult.OK))
+            {
+                this.editTab_RunCmdTextBox.Text = this.openFileAdd.FileName.ToString();
+                this.editTab_SaveButton.Focus();
+            }
         }
-        /***********************************************************************
-         * Open Folder Dialog. (EDIT)
-         ***********************************************************************/
+        /// <summary>
+        /// Open Folder Dialog. Set selection to textbox
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void editTab_BrowseFolderButton_Click(object sender, EventArgs e)
         {
             folderBrowser.ShowDialog();
 
-            String selectedFolder = folderBrowser.SelectedPath;
-
-            if (selectedFolder.Length > 0)
-                this.editTab_RunCmdTextBox.Text = selectedFolder;
+            if (folderBrowser.SelectedPath.Length > 0)
+            {
+                this.editTab_RunCmdTextBox.Text = folderBrowser.SelectedPath;
+                this.editTab_SaveButton.Focus();
+            }
         }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void editTab_SaveButton_Click(object sender, EventArgs e)
+        {
+            string name = this.editTab_CmdListBox.SelectedItem.ToString();
+            string command = this.editTab_RunCmdTextBox.Text;
+
+            if (name.Length == 0 || command.Length == 0)
+                return;
+
+            // Do "edit" via remove/add
+            oCmdsList.removeCmd(new ECommand(name));
+            bool result = oCmdsList.addCmd(new ECommand(name, command));
+
+            // IF failed to add
+            if (!result)
+            {
+                MessageBox.Show("Command cannot be saved.\nA command with the same name may already exist.", "New Command", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            // REFRESHING
+            this.addTab_CmdNameTextBox.Clear();
+            this.addTab_RunCmdTextBox.Clear();
+
+            this.loadCmdList();
+            MessageBox.Show("Command saved successfully.", "Edit Command", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
+
+        #endregion
+
+
+
 
   
 
