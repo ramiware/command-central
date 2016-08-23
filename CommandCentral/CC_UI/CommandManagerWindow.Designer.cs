@@ -119,7 +119,7 @@
             this.addTab_BrowseFolderButton.Location = new System.Drawing.Point(90, 89);
             this.addTab_BrowseFolderButton.Name = "addTab_BrowseFolderButton";
             this.addTab_BrowseFolderButton.Size = new System.Drawing.Size(75, 23);
-            this.addTab_BrowseFolderButton.TabIndex = 5;
+            this.addTab_BrowseFolderButton.TabIndex = 3;
             this.addTab_BrowseFolderButton.Text = "Folder...";
             this.addTab_BrowseFolderButton.UseVisualStyleBackColor = true;
             this.addTab_BrowseFolderButton.Click += new System.EventHandler(this.addTab_BrowseFolderButton_Click);
@@ -129,7 +129,7 @@
             this.addTab_BrowseFileButton.Location = new System.Drawing.Point(9, 89);
             this.addTab_BrowseFileButton.Name = "addTab_BrowseFileButton";
             this.addTab_BrowseFileButton.Size = new System.Drawing.Size(75, 23);
-            this.addTab_BrowseFileButton.TabIndex = 4;
+            this.addTab_BrowseFileButton.TabIndex = 2;
             this.addTab_BrowseFileButton.Text = "File...";
             this.addTab_BrowseFileButton.UseVisualStyleBackColor = true;
             this.addTab_BrowseFileButton.Click += new System.EventHandler(this.addTab_BrowseFileButton_Click);
@@ -158,7 +158,7 @@
             this.addTab_AddButton.Location = new System.Drawing.Point(333, 178);
             this.addTab_AddButton.Name = "addTab_AddButton";
             this.addTab_AddButton.Size = new System.Drawing.Size(75, 23);
-            this.addTab_AddButton.TabIndex = 3;
+            this.addTab_AddButton.TabIndex = 5;
             this.addTab_AddButton.Text = "Add";
             this.addTab_AddButton.UseVisualStyleBackColor = true;
             this.addTab_AddButton.Click += new System.EventHandler(this.addTab_AddButton_Click);
@@ -169,7 +169,7 @@
             this.addTab_RunCmdTextBox.Location = new System.Drawing.Point(9, 65);
             this.addTab_RunCmdTextBox.Name = "addTab_RunCmdTextBox";
             this.addTab_RunCmdTextBox.Size = new System.Drawing.Size(399, 18);
-            this.addTab_RunCmdTextBox.TabIndex = 2;
+            this.addTab_RunCmdTextBox.TabIndex = 1;
             this.addTab_RunCmdTextBox.TextChanged += new System.EventHandler(this.addTab_RunCmdTextBox_TextChanged);
             // 
             // addTab_CmdNameTextBox
@@ -177,7 +177,7 @@
             this.addTab_CmdNameTextBox.Location = new System.Drawing.Point(9, 152);
             this.addTab_CmdNameTextBox.Name = "addTab_CmdNameTextBox";
             this.addTab_CmdNameTextBox.Size = new System.Drawing.Size(399, 20);
-            this.addTab_CmdNameTextBox.TabIndex = 1;
+            this.addTab_CmdNameTextBox.TabIndex = 4;
             this.addTab_CmdNameTextBox.TextChanged += new System.EventHandler(this.addTab_CmdNameTextBox_TextChanged);
             // 
             // addLabel
@@ -317,7 +317,7 @@
             this.removeTab_RemoveButton.Location = new System.Drawing.Point(346, 120);
             this.removeTab_RemoveButton.Name = "removeTab_RemoveButton";
             this.removeTab_RemoveButton.Size = new System.Drawing.Size(75, 23);
-            this.removeTab_RemoveButton.TabIndex = 9;
+            this.removeTab_RemoveButton.TabIndex = 2;
             this.removeTab_RemoveButton.Text = "Remove";
             this.removeTab_RemoveButton.UseVisualStyleBackColor = true;
             this.removeTab_RemoveButton.Click += new System.EventHandler(this.removeTab_RemoveButton_Click);
@@ -341,7 +341,8 @@
             this.removeTab_RunCmdTextBox.Name = "removeTab_RunCmdTextBox";
             this.removeTab_RunCmdTextBox.ReadOnly = true;
             this.removeTab_RunCmdTextBox.Size = new System.Drawing.Size(412, 18);
-            this.removeTab_RunCmdTextBox.TabIndex = 7;
+            this.removeTab_RunCmdTextBox.TabIndex = 2;
+            this.removeTab_RunCmdTextBox.TabStop = false;
             // 
             // removeTab_CmdListBox
             // 
@@ -351,7 +352,7 @@
             this.removeTab_CmdListBox.MultiColumn = true;
             this.removeTab_CmdListBox.Name = "removeTab_CmdListBox";
             this.removeTab_CmdListBox.Size = new System.Drawing.Size(331, 173);
-            this.removeTab_CmdListBox.TabIndex = 2;
+            this.removeTab_CmdListBox.TabIndex = 1;
             this.removeTab_CmdListBox.SelectedIndexChanged += new System.EventHandler(this.removeTab_CmdListBox_SelectedIndexChanged);
             // 
             // label6

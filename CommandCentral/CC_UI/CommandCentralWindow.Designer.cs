@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(CommandCentralWindow));
             this.headerLabel = new System.Windows.Forms.Label();
             this.cmdsListPanel = new System.Windows.Forms.Panel();
@@ -37,20 +37,22 @@
             this.cmdsListLabel = new System.Windows.Forms.Label();
             this.cmdEntryDataGrid = new System.Windows.Forms.DataGridView();
             this.panelMainArea = new System.Windows.Forms.Panel();
+            this.footerPanel = new System.Windows.Forms.Panel();
+            this.footerLabelRAMValue = new System.Windows.Forms.Label();
+            this.footerLabelRAMTitle = new System.Windows.Forms.Label();
+            this.footerLabelCPUValue = new System.Windows.Forms.Label();
+            this.footerLabelCPUTitle = new System.Windows.Forms.Label();
             this.ccContextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.commandsMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.customizeMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exitMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.footerPanel = new System.Windows.Forms.Panel();
-            this.footerLabelCPUTitle = new System.Windows.Forms.Label();
-            this.footerLabelCPUValue = new System.Windows.Forms.Label();
-            this.footerLabelRAMValue = new System.Windows.Forms.Label();
-            this.labelFooterRAMTitle = new System.Windows.Forms.Label();
+            this.footerLabelProcessesValue = new System.Windows.Forms.Label();
+            this.footerLabelProcessesTitle = new System.Windows.Forms.Label();
             this.cmdsListPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.cmdEntryDataGrid)).BeginInit();
             this.panelMainArea.SuspendLayout();
-            this.ccContextMenuStrip.SuspendLayout();
             this.footerPanel.SuspendLayout();
+            this.ccContextMenuStrip.SuspendLayout();
             this.SuspendLayout();
             // 
             // headerLabel
@@ -122,14 +124,14 @@
             this.cmdEntryDataGrid.ClipboardCopyMode = System.Windows.Forms.DataGridViewClipboardCopyMode.EnableWithoutHeaderText;
             this.cmdEntryDataGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.cmdEntryDataGrid.ColumnHeadersVisible = false;
-            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.TopLeft;
-            dataGridViewCellStyle1.BackColor = System.Drawing.Color.Black;
-            dataGridViewCellStyle1.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle1.ForeColor = System.Drawing.Color.White;
-            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.cmdEntryDataGrid.DefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.TopLeft;
+            dataGridViewCellStyle3.BackColor = System.Drawing.Color.Black;
+            dataGridViewCellStyle3.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle3.ForeColor = System.Drawing.Color.White;
+            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.cmdEntryDataGrid.DefaultCellStyle = dataGridViewCellStyle3;
             this.cmdEntryDataGrid.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnKeystroke;
             this.cmdEntryDataGrid.GridColor = System.Drawing.Color.Yellow;
             this.cmdEntryDataGrid.ImeMode = System.Windows.Forms.ImeMode.NoControl;
@@ -160,6 +162,55 @@
             this.panelMainArea.Size = new System.Drawing.Size(396, 342);
             this.panelMainArea.TabIndex = 100;
             // 
+            // footerPanel
+            // 
+            this.footerPanel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
+            this.footerPanel.Controls.Add(this.footerLabelProcessesValue);
+            this.footerPanel.Controls.Add(this.footerLabelProcessesTitle);
+            this.footerPanel.Controls.Add(this.footerLabelRAMValue);
+            this.footerPanel.Controls.Add(this.footerLabelRAMTitle);
+            this.footerPanel.Controls.Add(this.footerLabelCPUValue);
+            this.footerPanel.Controls.Add(this.footerLabelCPUTitle);
+            this.footerPanel.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.footerPanel.Location = new System.Drawing.Point(0, 319);
+            this.footerPanel.Name = "footerPanel";
+            this.footerPanel.Size = new System.Drawing.Size(396, 23);
+            this.footerPanel.TabIndex = 100;
+            // 
+            // footerLabelRAMValue
+            // 
+            this.footerLabelRAMValue.Location = new System.Drawing.Point(323, 5);
+            this.footerLabelRAMValue.Name = "footerLabelRAMValue";
+            this.footerLabelRAMValue.Size = new System.Drawing.Size(61, 13);
+            this.footerLabelRAMValue.TabIndex = 3;
+            this.footerLabelRAMValue.Text = "10.36 GB";
+            // 
+            // footerLabelRAMTitle
+            // 
+            this.footerLabelRAMTitle.AutoSize = true;
+            this.footerLabelRAMTitle.Location = new System.Drawing.Point(217, 5);
+            this.footerLabelRAMTitle.Name = "footerLabelRAMTitle";
+            this.footerLabelRAMTitle.Size = new System.Drawing.Size(109, 13);
+            this.footerLabelRAMTitle.TabIndex = 2;
+            this.footerLabelRAMTitle.Text = "Available Memory:";
+            // 
+            // footerLabelCPUValue
+            // 
+            this.footerLabelCPUValue.Location = new System.Drawing.Point(176, 5);
+            this.footerLabelCPUValue.Name = "footerLabelCPUValue";
+            this.footerLabelCPUValue.Size = new System.Drawing.Size(35, 13);
+            this.footerLabelCPUValue.TabIndex = 1;
+            this.footerLabelCPUValue.Text = "100%";
+            // 
+            // footerLabelCPUTitle
+            // 
+            this.footerLabelCPUTitle.AutoSize = true;
+            this.footerLabelCPUTitle.Location = new System.Drawing.Point(112, 5);
+            this.footerLabelCPUTitle.Name = "footerLabelCPUTitle";
+            this.footerLabelCPUTitle.Size = new System.Drawing.Size(67, 13);
+            this.footerLabelCPUTitle.TabIndex = 0;
+            this.footerLabelCPUTitle.Text = "CPU Usage:";
+            // 
             // ccContextMenuStrip
             // 
             this.ccContextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -167,13 +218,13 @@
             this.customizeMenuItem,
             this.exitMenuItem});
             this.ccContextMenuStrip.Name = "cmdBoxMenu";
-            this.ccContextMenuStrip.Size = new System.Drawing.Size(137, 70);
+            this.ccContextMenuStrip.Size = new System.Drawing.Size(153, 92);
             // 
             // commandsMenuItem
             // 
             this.commandsMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("commandsMenuItem.Image")));
             this.commandsMenuItem.Name = "commandsMenuItem";
-            this.commandsMenuItem.Size = new System.Drawing.Size(136, 22);
+            this.commandsMenuItem.Size = new System.Drawing.Size(152, 22);
             this.commandsMenuItem.Text = "Commands";
             this.commandsMenuItem.Click += new System.EventHandler(this.commandsMenuItem_Click);
             // 
@@ -188,55 +239,26 @@
             // 
             this.exitMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("exitMenuItem.Image")));
             this.exitMenuItem.Name = "exitMenuItem";
-            this.exitMenuItem.Size = new System.Drawing.Size(136, 22);
+            this.exitMenuItem.Size = new System.Drawing.Size(152, 22);
             this.exitMenuItem.Text = "Exit";
+            this.exitMenuItem.Click += new System.EventHandler(this.exitMenuItem_Click);
             // 
-            // footerPanel
+            // footerLabelProcessesValue
             // 
-            this.footerPanel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
-            this.footerPanel.Controls.Add(this.footerLabelRAMValue);
-            this.footerPanel.Controls.Add(this.labelFooterRAMTitle);
-            this.footerPanel.Controls.Add(this.footerLabelCPUValue);
-            this.footerPanel.Controls.Add(this.footerLabelCPUTitle);
-            this.footerPanel.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.footerPanel.Location = new System.Drawing.Point(0, 319);
-            this.footerPanel.Name = "footerPanel";
-            this.footerPanel.Size = new System.Drawing.Size(396, 23);
-            this.footerPanel.TabIndex = 100;
+            this.footerLabelProcessesValue.Location = new System.Drawing.Point(70, 5);
+            this.footerLabelProcessesValue.Name = "footerLabelProcessesValue";
+            this.footerLabelProcessesValue.Size = new System.Drawing.Size(30, 13);
+            this.footerLabelProcessesValue.TabIndex = 5;
+            this.footerLabelProcessesValue.Text = "100";
             // 
-            // footerLabelCPUTitle
+            // footerLabelProcessesTitle
             // 
-            this.footerLabelCPUTitle.AutoSize = true;
-            this.footerLabelCPUTitle.Location = new System.Drawing.Point(2, 5);
-            this.footerLabelCPUTitle.Name = "footerLabelCPUTitle";
-            this.footerLabelCPUTitle.Size = new System.Drawing.Size(31, 13);
-            this.footerLabelCPUTitle.TabIndex = 0;
-            this.footerLabelCPUTitle.Text = "CPU:";
-            // 
-            // footerLabelCPUValue
-            // 
-            this.footerLabelCPUValue.Location = new System.Drawing.Point(30, 5);
-            this.footerLabelCPUValue.Name = "footerLabelCPUValue";
-            this.footerLabelCPUValue.Size = new System.Drawing.Size(43, 13);
-            this.footerLabelCPUValue.TabIndex = 1;
-            this.footerLabelCPUValue.Text = "100 %";
-            // 
-            // footerLabelRAMValue
-            // 
-            this.footerLabelRAMValue.Location = new System.Drawing.Point(107, 5);
-            this.footerLabelRAMValue.Name = "footerLabelRAMValue";
-            this.footerLabelRAMValue.Size = new System.Drawing.Size(79, 13);
-            this.footerLabelRAMValue.TabIndex = 3;
-            this.footerLabelRAMValue.Text = "2.36 GB";
-            // 
-            // labelFooterRAMTitle
-            // 
-            this.labelFooterRAMTitle.AutoSize = true;
-            this.labelFooterRAMTitle.Location = new System.Drawing.Point(79, 5);
-            this.labelFooterRAMTitle.Name = "labelFooterRAMTitle";
-            this.labelFooterRAMTitle.Size = new System.Drawing.Size(31, 13);
-            this.labelFooterRAMTitle.TabIndex = 2;
-            this.labelFooterRAMTitle.Text = "RAM:";
+            this.footerLabelProcessesTitle.AutoSize = true;
+            this.footerLabelProcessesTitle.Location = new System.Drawing.Point(6, 5);
+            this.footerLabelProcessesTitle.Name = "footerLabelProcessesTitle";
+            this.footerLabelProcessesTitle.Size = new System.Drawing.Size(67, 13);
+            this.footerLabelProcessesTitle.TabIndex = 4;
+            this.footerLabelProcessesTitle.Text = "Processes:";
             // 
             // CommandCentralWindow
             // 
@@ -259,9 +281,9 @@
             this.cmdsListPanel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.cmdEntryDataGrid)).EndInit();
             this.panelMainArea.ResumeLayout(false);
-            this.ccContextMenuStrip.ResumeLayout(false);
             this.footerPanel.ResumeLayout(false);
             this.footerPanel.PerformLayout();
+            this.ccContextMenuStrip.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -280,9 +302,11 @@
         private System.Windows.Forms.ToolStripMenuItem exitMenuItem;
         private System.Windows.Forms.Panel footerPanel;
         private System.Windows.Forms.Label footerLabelRAMValue;
-        private System.Windows.Forms.Label labelFooterRAMTitle;
+        private System.Windows.Forms.Label footerLabelRAMTitle;
         private System.Windows.Forms.Label footerLabelCPUValue;
         private System.Windows.Forms.Label footerLabelCPUTitle;
+        private System.Windows.Forms.Label footerLabelProcessesValue;
+        private System.Windows.Forms.Label footerLabelProcessesTitle;
     }
 }
 

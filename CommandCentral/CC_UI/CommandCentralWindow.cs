@@ -53,7 +53,7 @@ namespace CommandCentral.CC_UI
             headerLabel.ContextMenuStrip = ccContextMenuStrip;
 
             // Performance Display
-            Performance performanceObject = new Performance(this.footerLabelCPUValue, this.footerLabelRAMValue);
+            Performance performanceObject = new Performance(this.footerLabelProcessesValue, this.footerLabelCPUValue, this.footerLabelRAMValue);
 
         }
 
@@ -268,6 +268,11 @@ namespace CommandCentral.CC_UI
             return base.ProcessCmdKey(ref msg, keyData);
         }
 
+        private void exitMenuItem_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+
         #region UI SETUP  >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
         /// <summary>
         /// Sets up the datagrid
@@ -315,6 +320,7 @@ namespace CommandCentral.CC_UI
             this.cmdsListLabel.ForeColor = Color.Gold;
             this.cmdsListTextArea.Font = new Font(Lib.APP_FONT, 8.00F, FontStyle.Bold, GraphicsUnit.Point, ((byte)(0)));
 
+            this.footerLabelProcessesValue.ForeColor = Color.LimeGreen;
             this.footerLabelCPUValue.ForeColor = Color.LimeGreen;
             this.footerLabelRAMValue.ForeColor = Color.LimeGreen;
 
@@ -494,6 +500,8 @@ namespace CommandCentral.CC_UI
         }
 
         #endregion
+
+
 
 
     }

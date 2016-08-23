@@ -17,7 +17,8 @@ namespace CommandCentral.CC_UI
 
         public static int ROW_HEIGHT = 14;
 
-        public static string MARGIN_CHAR_DEFAULT = "$";
+        //public static string MARGIN_CHAR_DEFAULT = ">";
+        public static string MARGIN_CHAR_DEFAULT = "›";
         public static string MARGIN_CHAR_MESSAGE = "";
 
     }

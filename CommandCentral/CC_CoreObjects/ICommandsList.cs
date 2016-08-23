@@ -14,7 +14,7 @@ namespace CommandCentral.CC_CoreObjects
 
         public ICommandsList()
         {
-            iCmdList.Add(new ICommand("cmdmngr", "-allows you to add/edit/del commands"));
+            iCmdList.Add(new ICommand("cmdmgr", "-add/edit/del items from your Commands List"));
             iCmdList.Add(new ICommand("clear", "-clears the screen"));
             iCmdList.Add(new ICommand("exit", "-closes the application"));
 

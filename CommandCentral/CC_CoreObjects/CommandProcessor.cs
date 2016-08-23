@@ -71,7 +71,7 @@ namespace CommandCentral.CC_CoreObjects
             }
             catch (Exception e)
             {
-                runCmdReturnString = "Command failed. Try help.";
+                runCmdReturnString = Lib.TEXT_TRY_HELP_CMDFAILED;
                 runCmdReturnType = ReturnType.ErrorMsg;
                 return false;
             }
@@ -111,7 +111,7 @@ namespace CommandCentral.CC_CoreObjects
             // ----------------------------------------------------
             if (cmdName.Equals("help", StringComparison.CurrentCultureIgnoreCase))
             {
-                runCmdReturnString = Lib.TEXT_TRY_ICOMMAND_LINE1OF2 + Lib.NL + Lib.TEXT_TRY_ICOMMAND_LINE2OF2 + Lib.NL;
+                runCmdReturnString = Lib.TEXT_TRY_ICOMMAND_LINE1OF3 + Lib.NL + Lib.TEXT_TRY_ICOMMAND_LINE2OF3 + Lib.NL + Lib.TEXT_TRY_ICOMMAND_LINE3OF3 + Lib.NL;
                 runCmdReturnType = ReturnType.InfoMsg;
                 return true;
             }
@@ -134,7 +134,7 @@ namespace CommandCentral.CC_CoreObjects
             }
 
             runCmdReturnString = "";
-            runCmdReturnType = ReturnType.ReadyForInput; //ReturnType.Blank;
+            runCmdReturnType = ReturnType.ReadyForInput;
             return false;
         }
 
@@ -154,7 +154,7 @@ namespace CommandCentral.CC_CoreObjects
 
 
             // mngcmds
-            if (cmd.CmdName.Equals("cmdmngr"))
+            if (cmd.CmdName.Equals("cmdmgr"))
             {
                 CommandManagerWindow oCmdMngrWin = new CommandManagerWindow(oCmdWin);
                 oCmdMngrWin.StartPosition = FormStartPosition.CenterParent;
@@ -208,7 +208,7 @@ namespace CommandCentral.CC_CoreObjects
             // Validate RunCmd
             if (eCmd.RunCmd == null || eCmd.RunCmd.Length == 0)
             {
-                runCmdReturnString = "Command not found. Try help.";
+                runCmdReturnString = Lib.TEXT_TRY_HELP_CMDNOTFOUND;
                 runCmdReturnType = ReturnType.ErrorMsg;
                 return false;
             }
@@ -242,7 +242,7 @@ namespace CommandCentral.CC_CoreObjects
             }
             catch (Exception e)
             {
-                runCmdReturnString = "Command failed. Try help.";
+                runCmdReturnString = Lib.TEXT_TRY_HELP_CMDFAILED;
                 runCmdReturnType = ReturnType.ErrorMsg;
                 return false;
             }
@@ -295,7 +295,7 @@ namespace CommandCentral.CC_CoreObjects
             }
             catch (Exception e)
             {
-                runCmdReturnString = "Command not found. Try help.";
+                runCmdReturnString = Lib.TEXT_TRY_HELP_CMDNOTFOUND;
                 runCmdReturnType = ReturnType.ErrorMsg;
                 return false;
             }

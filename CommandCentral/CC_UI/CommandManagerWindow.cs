@@ -42,7 +42,7 @@ namespace CommandCentral.CC_UI
         /// <param name="e"></param>
         private void CommandManagerWindow_Shown(object sender, EventArgs e)
         {
-            this.addTab_CmdNameTextBox.Focus();
+            this.addTab_RunCmdTextBox.Focus();
         }
 
 
