@@ -57,6 +57,9 @@ namespace CommandCentral.CC_UI
 
         }
 
+        #region CORE LOGIC  >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+
         /// <summary>
         /// Clears the grid
         /// </summary>
@@ -272,6 +275,8 @@ namespace CommandCentral.CC_UI
         {
             this.Close();
         }
+
+        #endregion
 
         #region UI SETUP  >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
         /// <summary>

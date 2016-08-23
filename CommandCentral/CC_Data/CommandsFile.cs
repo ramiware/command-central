@@ -1,4 +1,5 @@
-﻿using CommandCentral.CC_CoreObjects;
+﻿using CommandCentral.CC_Common;
+using CommandCentral.CC_CoreObjects;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -12,7 +13,7 @@ namespace CommandCentral.CC_Data
 {
     class CommandsFile
     {
-        private string COMMANDS_FILEPATH = Application.StartupPath + @"\" + Environment.UserName + @"\";
+        private string COMMANDS_FILEPATH = ""; //Application.StartupPath + @"\" + Environment.UserName + @"\";
         private string COMMANDS_FILENAME = "commands.rami";
 
         /// <summary>
@@ -23,6 +24,10 @@ namespace CommandCentral.CC_Data
             FileStream commandsFile = null;
             try
             {
+                // Create Path if it does not exist - C:\Users\ramis\AppData\Local\RamiWare\
+                COMMANDS_FILEPATH = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData, Environment.SpecialFolderOption.Create), About.APP_PARENT_NAME + @"\" + About.APP_NAME_LONG);
+                COMMANDS_FILEPATH += @"\";
+
                 if (!Directory.Exists(COMMANDS_FILEPATH))
                     Directory.CreateDirectory(COMMANDS_FILEPATH);
 
@@ -32,12 +37,9 @@ namespace CommandCentral.CC_Data
                     commandsFile.Close();
                 }
             }
-            catch //(Exception e)
+            catch (Exception e)
             {
-                //Console.WriteLine("An error occurred while trying to create the commands file.\n\n" +
-                //                 e.Message, "File Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                //oLogFile.WriteLine("An error occurred while trying to create the commands file.\n" + e.Message, LogFile.LOG_TYPES.DEBUG);
-
+                MessageBox.Show("An Error occurred while trying to create the Commands File." + About.APP_CONTACT + "\n\n" + e.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 commandsFile.Close();
                 return;
             }
@@ -63,11 +65,9 @@ namespace CommandCentral.CC_Data
                     return fileContents;
                 }
             }
-            catch //(Exception e)
+            catch (Exception e)
             {
-                //MessageBox.Show("An error occurred while trying to access your playlist file contents\n\n" +
-                //                 e.Message, "Read Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                //oLogFile.WriteLine("An error occurred while trying to access your playlist file contents\n" + e.Message, LogFile.LOG_TYPES.DEBUG);
+                MessageBox.Show("An Error occurred while trying to access the Commands File." + About.APP_CONTACT + "\n\n" + e.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 sr.Close();
                 return new ArrayList();
             }
@@ -99,11 +99,9 @@ namespace CommandCentral.CC_Data
                     return true;
                 }
             }
-            catch //(Exception e)
+            catch (Exception e)
             {
-                //MessageBox.Show("An error occurred while trying ..\n\n" +
-                //                 e.Message, "Add Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                //oLogFile.WriteLine("An error occurred while trying to ... ", LogFile.LOG_TYPES.DEBUG);
+                MessageBox.Show("An Error occurred while trying to add to the Commands File." + About.APP_CONTACT + "\n\n" + e.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 sw.Close();
                 return false;
             }

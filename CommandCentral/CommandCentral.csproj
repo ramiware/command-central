@@ -44,6 +44,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CC_Common\About.cs" />
     <Compile Include="CC_Common\Lib.cs" />
     <Compile Include="CC_CoreObjects\CommandBuffer.cs" />
     <Compile Include="CC_CoreObjects\CommandObject.cs" />
