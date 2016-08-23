@@ -10,7 +10,6 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace CommandCentral.CC_UI
@@ -52,6 +51,9 @@ namespace CommandCentral.CC_UI
             cmdsListTextArea.ContextMenuStrip = ccContextMenuStrip;
             cmdsListLabel.ContextMenuStrip = ccContextMenuStrip;
             headerLabel.ContextMenuStrip = ccContextMenuStrip;
+
+            // Performance Display
+            Performance performanceObject = new Performance(this.footerLabelCPUValue, this.footerLabelRAMValue);
 
         }
 
@@ -307,11 +309,16 @@ namespace CommandCentral.CC_UI
         /// </summary>
         private void InitializeCustomInterface()
         {
+            // General Settings
             this.Font = new Font(Lib.APP_FONT, 8.25F, FontStyle.Regular, GraphicsUnit.Point, ((byte)(0)));
             this.cmdsListLabel.Font = new Font(Lib.APP_FONT, 8.00F, FontStyle.Bold, GraphicsUnit.Point, ((byte)(0)));
             this.cmdsListLabel.ForeColor = Color.Gold;
             this.cmdsListTextArea.Font = new Font(Lib.APP_FONT, 8.00F, FontStyle.Bold, GraphicsUnit.Point, ((byte)(0)));
 
+            this.footerLabelCPUValue.ForeColor = Color.LimeGreen;
+            this.footerLabelRAMValue.ForeColor = Color.LimeGreen;
+
+            // Custom Settings
             AppRegistry oAppReg = new AppRegistry();
 
             this.setAppColours(oAppReg.getKeyValue(AppRegistry.CCKeys.BackColor), oAppReg.getKeyValue(AppRegistry.CCKeys.ForeColor));
@@ -487,6 +494,7 @@ namespace CommandCentral.CC_UI
         }
 
         #endregion
+
 
     }
 }

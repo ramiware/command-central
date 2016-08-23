@@ -41,10 +41,16 @@
             this.commandsMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.customizeMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exitMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.footerPanel = new System.Windows.Forms.Panel();
+            this.footerLabelCPUTitle = new System.Windows.Forms.Label();
+            this.footerLabelCPUValue = new System.Windows.Forms.Label();
+            this.footerLabelRAMValue = new System.Windows.Forms.Label();
+            this.labelFooterRAMTitle = new System.Windows.Forms.Label();
             this.cmdsListPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.cmdEntryDataGrid)).BeginInit();
             this.panelMainArea.SuspendLayout();
             this.ccContextMenuStrip.SuspendLayout();
+            this.footerPanel.SuspendLayout();
             this.SuspendLayout();
             // 
             // headerLabel
@@ -67,7 +73,7 @@
             this.cmdsListPanel.Location = new System.Drawing.Point(299, 3);
             this.cmdsListPanel.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.cmdsListPanel.Name = "cmdsListPanel";
-            this.cmdsListPanel.Size = new System.Drawing.Size(92, 341);
+            this.cmdsListPanel.Size = new System.Drawing.Size(92, 310);
             this.cmdsListPanel.TabIndex = 2;
             // 
             // cmdsListTextArea
@@ -85,7 +91,7 @@
             this.cmdsListTextArea.Name = "cmdsListTextArea";
             this.cmdsListTextArea.ReadOnly = true;
             this.cmdsListTextArea.ShortcutsEnabled = false;
-            this.cmdsListTextArea.Size = new System.Drawing.Size(91, 311);
+            this.cmdsListTextArea.Size = new System.Drawing.Size(91, 280);
             this.cmdsListTextArea.TabIndex = 99;
             this.cmdsListTextArea.TabStop = false;
             this.cmdsListTextArea.Enter += new System.EventHandler(this.cmdsListTextArea_Enter);
@@ -135,7 +141,7 @@
             this.cmdEntryDataGrid.RowTemplate.Height = 23;
             this.cmdEntryDataGrid.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.cmdEntryDataGrid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
-            this.cmdEntryDataGrid.Size = new System.Drawing.Size(298, 342);
+            this.cmdEntryDataGrid.Size = new System.Drawing.Size(298, 313);
             this.cmdEntryDataGrid.TabIndex = 0;
             this.cmdEntryDataGrid.TabStop = false;
             this.cmdEntryDataGrid.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.cmdEntryDataGrid_CellClick);
@@ -144,8 +150,9 @@
             // panelMainArea
             // 
             this.panelMainArea.BackColor = System.Drawing.Color.Black;
-            this.panelMainArea.Controls.Add(this.cmdEntryDataGrid);
+            this.panelMainArea.Controls.Add(this.footerPanel);
             this.panelMainArea.Controls.Add(this.cmdsListPanel);
+            this.panelMainArea.Controls.Add(this.cmdEntryDataGrid);
             this.panelMainArea.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panelMainArea.Location = new System.Drawing.Point(0, 19);
             this.panelMainArea.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
@@ -184,6 +191,53 @@
             this.exitMenuItem.Size = new System.Drawing.Size(136, 22);
             this.exitMenuItem.Text = "Exit";
             // 
+            // footerPanel
+            // 
+            this.footerPanel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
+            this.footerPanel.Controls.Add(this.footerLabelRAMValue);
+            this.footerPanel.Controls.Add(this.labelFooterRAMTitle);
+            this.footerPanel.Controls.Add(this.footerLabelCPUValue);
+            this.footerPanel.Controls.Add(this.footerLabelCPUTitle);
+            this.footerPanel.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.footerPanel.Location = new System.Drawing.Point(0, 319);
+            this.footerPanel.Name = "footerPanel";
+            this.footerPanel.Size = new System.Drawing.Size(396, 23);
+            this.footerPanel.TabIndex = 100;
+            // 
+            // footerLabelCPUTitle
+            // 
+            this.footerLabelCPUTitle.AutoSize = true;
+            this.footerLabelCPUTitle.Location = new System.Drawing.Point(2, 5);
+            this.footerLabelCPUTitle.Name = "footerLabelCPUTitle";
+            this.footerLabelCPUTitle.Size = new System.Drawing.Size(31, 13);
+            this.footerLabelCPUTitle.TabIndex = 0;
+            this.footerLabelCPUTitle.Text = "CPU:";
+            // 
+            // footerLabelCPUValue
+            // 
+            this.footerLabelCPUValue.Location = new System.Drawing.Point(30, 5);
+            this.footerLabelCPUValue.Name = "footerLabelCPUValue";
+            this.footerLabelCPUValue.Size = new System.Drawing.Size(43, 13);
+            this.footerLabelCPUValue.TabIndex = 1;
+            this.footerLabelCPUValue.Text = "100 %";
+            // 
+            // footerLabelRAMValue
+            // 
+            this.footerLabelRAMValue.Location = new System.Drawing.Point(107, 5);
+            this.footerLabelRAMValue.Name = "footerLabelRAMValue";
+            this.footerLabelRAMValue.Size = new System.Drawing.Size(79, 13);
+            this.footerLabelRAMValue.TabIndex = 3;
+            this.footerLabelRAMValue.Text = "2.36 GB";
+            // 
+            // labelFooterRAMTitle
+            // 
+            this.labelFooterRAMTitle.AutoSize = true;
+            this.labelFooterRAMTitle.Location = new System.Drawing.Point(79, 5);
+            this.labelFooterRAMTitle.Name = "labelFooterRAMTitle";
+            this.labelFooterRAMTitle.Size = new System.Drawing.Size(31, 13);
+            this.labelFooterRAMTitle.TabIndex = 2;
+            this.labelFooterRAMTitle.Text = "RAM:";
+            // 
             // CommandCentralWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -206,6 +260,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.cmdEntryDataGrid)).EndInit();
             this.panelMainArea.ResumeLayout(false);
             this.ccContextMenuStrip.ResumeLayout(false);
+            this.footerPanel.ResumeLayout(false);
+            this.footerPanel.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -222,6 +278,11 @@
         private System.Windows.Forms.ToolStripMenuItem commandsMenuItem;
         private System.Windows.Forms.ToolStripMenuItem customizeMenuItem;
         private System.Windows.Forms.ToolStripMenuItem exitMenuItem;
+        private System.Windows.Forms.Panel footerPanel;
+        private System.Windows.Forms.Label footerLabelRAMValue;
+        private System.Windows.Forms.Label labelFooterRAMTitle;
+        private System.Windows.Forms.Label footerLabelCPUValue;
+        private System.Windows.Forms.Label footerLabelCPUTitle;
     }
 }
 

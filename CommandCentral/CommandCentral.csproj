@@ -52,6 +52,7 @@
     <Compile Include="CC_CoreObjects\ECommandsList.cs" />
     <Compile Include="CC_CoreObjects\ICommand.cs" />
     <Compile Include="CC_CoreObjects\ICommandsList.cs" />
+    <Compile Include="CC_CoreObjects\Performance.cs" />
     <Compile Include="CC_Data\AppRegistry.cs" />
     <Compile Include="CC_Data\CommandsFile.cs" />
     <Compile Include="CC_UI\CommandCentralWindow.cs">

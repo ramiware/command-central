@@ -286,7 +286,7 @@ namespace CommandCentral.CC_UI
          ***********************************************************************/
         private void closeButton_Click(object sender, EventArgs e)
         {
-            this.Hide();
+            this.Close();
         }
         /***********************************************************************
          * KeyPress Handler (Escape Key)
@@ -294,7 +294,7 @@ namespace CommandCentral.CC_UI
         private void cmdControl_KeyPress(object sender, KeyPressEventArgs e)
         {
             if (e.KeyChar == (char)Keys.Escape)
-                this.Hide();
+                this.Close();
         }
 
         /***********************************************************************
