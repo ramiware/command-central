@@ -161,6 +161,14 @@ namespace CommandCentral.CC_CoreObjects
                 oCmdMngrWin.ShowDialog(oCmdWin);
             }
 
+            // processes
+            if (cmd.CmdName.Equals("processes"))
+            {
+                ProcessesWindow oProcessesWin = new ProcessesWindow();
+                oProcessesWin.StartPosition = FormStartPosition.CenterParent;
+                oProcessesWin.ShowDialog(oCmdWin);
+            }
+
             // clear
             if (cmd.CmdName.Equals("clear"))
             {

@@ -21,7 +21,7 @@ namespace CommandCentral.CC_Common
         public static string APP_CONTACT = "\n\nFor questions, comments, suggestions or to report an issue contact support@ramiware.com or visit www.ramiware.com";
 
         public static string APP_ABOUT = APP_NAME_LONG + " Version " + APP_VERSION + "\n" +
-                                         "Copyright © 2016 RamiWare\n" +
+                                         "Copyright © 2017 RamiWare\n" +
                                          "All rights reserved.";
     }
 }

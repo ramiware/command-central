@@ -506,8 +506,5 @@ namespace CommandCentral.CC_UI
 
         #endregion
 
-
-
-
     }
 }
