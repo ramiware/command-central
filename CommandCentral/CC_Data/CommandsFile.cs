@@ -13,7 +13,7 @@ namespace CommandCentral.CC_Data
 {
     class CommandsFile
     {
-        private string COMMANDS_FILEPATH = ""; //Application.StartupPath + @"\" + Environment.UserName + @"\";
+        private string COMMANDS_FILEPATH = "";
         private string COMMANDS_FILENAME = "commands.rami";
 
         /// <summary>
@@ -24,7 +24,7 @@ namespace CommandCentral.CC_Data
             FileStream commandsFile = null;
             try
             {
-                // Create Path if it does not exist - C:\Users\ramis\AppData\Local\RamiWare\
+                // Create Path if it does not exist - C:\Users\ramis\AppData\Local\Ramiware\
                 COMMANDS_FILEPATH = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData, Environment.SpecialFolderOption.Create), About.APP_PARENT_NAME + @"\" + About.APP_NAME_LONG);
                 COMMANDS_FILEPATH += @"\";
 
@@ -89,7 +89,7 @@ namespace CommandCentral.CC_Data
             {
                 using (sw = File.CreateText(COMMANDS_FILEPATH + COMMANDS_FILENAME))
                 {
-                    FileInfo playlistFile = new FileInfo(COMMANDS_FILEPATH + COMMANDS_FILENAME);
+                    FileInfo commandsFile = new FileInfo(COMMANDS_FILEPATH + COMMANDS_FILENAME);
 
                     foreach (ECommand cmd in cmdList)
                         sw.WriteLine(cmd.CmdName+"="+cmd.RunCmd);

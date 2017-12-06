@@ -18,12 +18,12 @@ namespace CommandCentral.CC_CoreObjects
         private ECommandsList oECommandsList = new ECommandsList();
 
 
-        // Command Process Return Types
-        public enum ReturnType
+        // Command Process Return Codes
+        public enum RunCmdReturnCode
         {
-            ErrorMsg,
-            InfoMsg,
-            ExecMsg,
+            Error,
+            InfoProvided,
+            Executed,
             ReadyForInput
         }
 
@@ -40,39 +40,39 @@ namespace CommandCentral.CC_CoreObjects
         /// Handles internal, external, and native command execution
         /// </summary>
         /// <returns></returns>
-        public bool executeCmd(CommandObject cmd, out ReturnType runCmdReturnType, out string runCmdReturnString)
+        public bool executeCmd(CommandObject cmd, out RunCmdReturnCode runCmdReturnCode, out string runCmdReturnMessage)
         {
             try
             {
                 // Validate
-                if (!isCmdNameValid(cmd, out runCmdReturnType, out runCmdReturnString))
+                if (!isCmdNameValid(cmd, out runCmdReturnCode, out runCmdReturnMessage))
                     return true;
 
                 // Get clean cmdName
                 string cmdNameValue = cmd.CmdName.Trim();
 
                 // Is this a Help command request?
-                if (isHelpCommand(cmdNameValue, out runCmdReturnType, out runCmdReturnString))
+                if (isHelpCommand(cmdNameValue, out runCmdReturnCode, out runCmdReturnMessage))
                     return true;
 
 
                 // Is this an Internal Command request?
                 if (oICommandsList.getCommandsList().Contains(new ICommand(cmdNameValue)))
-                    return processInternalCmd(new ICommand(cmdNameValue), out runCmdReturnType, out runCmdReturnString);
+                    return processInternalCmd(new ICommand(cmdNameValue), out runCmdReturnCode, out runCmdReturnMessage);
 
 
                 // Is this an External command request?
                 // If processExternalCmd returns false, try to process as a native windows command.
-                if (!processExternalCmd(cmdNameValue, out runCmdReturnType, out runCmdReturnString))
-                    return tryProcessNativeCmd(cmdNameValue, out runCmdReturnType, out runCmdReturnString);
+                if (!processExternalCmd(cmdNameValue, out runCmdReturnCode, out runCmdReturnMessage))
+                    return tryProcessNativeCmd(cmdNameValue, out runCmdReturnCode, out runCmdReturnMessage);
                 else 
                     return true;
 
             }
             catch (Exception e)
             {
-                runCmdReturnString = Lib.TEXT_TRY_HELP_CMDFAILED;
-                runCmdReturnType = ReturnType.ErrorMsg;
+                runCmdReturnMessage = Lib.RETURN_MSG_CMDFAILED;
+                runCmdReturnCode = RunCmdReturnCode.Error;
                 return false;
             }
         }
@@ -81,20 +81,20 @@ namespace CommandCentral.CC_CoreObjects
         /// Validates the cmd object and the cmdName attribute
         /// </summary>
         /// <param name="cmd"></param>
-        /// <param name="runCmdReturnType"></param>
-        /// <param name="runCmdReturnString"></param>
+        /// <param name="runCmdReturnCode"></param>
+        /// <param name="runCmdReturnMessage"></param>
         /// <returns></returns>
-        private bool isCmdNameValid(CommandObject cmd, out ReturnType runCmdReturnType, out string runCmdReturnString)
+        private bool isCmdNameValid(CommandObject cmd, out RunCmdReturnCode runCmdReturnCode, out string runCmdReturnMessage)
         {
             if (cmd == null || cmd.CmdName == null || cmd.CmdName.Trim().Length == 0)
             {
-                runCmdReturnString = "";
-                runCmdReturnType = ReturnType.ReadyForInput;
+                runCmdReturnMessage = "";
+                runCmdReturnCode = RunCmdReturnCode.ReadyForInput;
                 return false;
             }
 
-            runCmdReturnString = "";
-            runCmdReturnType = ReturnType.ReadyForInput;
+            runCmdReturnMessage = "";
+            runCmdReturnCode = RunCmdReturnCode.ReadyForInput;
             return true;
         }
 
@@ -102,17 +102,17 @@ namespace CommandCentral.CC_CoreObjects
         /// IF cmdName is identified as a help command, process it and return true
         /// </summary>
         /// <param name="cmdName"></param>
-        /// <param name="runCmdReturnString"></param>
+        /// <param name="runCmdReturnMessage"></param>
         /// <returns></returns>
-        private bool isHelpCommand(string cmdName, out ReturnType runCmdReturnType, out string runCmdReturnString)
+        private bool isHelpCommand(string cmdName, out RunCmdReturnCode runCmdReturnCode, out string runCmdReturnMessage)
         {
             // ----------------------------------------------------
             // DISPLAY HELP
             // ----------------------------------------------------
             if (cmdName.Equals("help", StringComparison.CurrentCultureIgnoreCase))
             {
-                runCmdReturnString = Lib.TEXT_TRY_ICOMMAND_LINE1OF3 + Lib.NL + Lib.TEXT_TRY_ICOMMAND_LINE2OF3 + Lib.NL + Lib.TEXT_TRY_ICOMMAND_LINE3OF3 + Lib.NL;
-                runCmdReturnType = ReturnType.InfoMsg;
+                runCmdReturnMessage = Lib.RETURN_MSG_HELP_1OF3 + Lib.NL + Lib.RETURN_MSG_HELP_2OF3 + Lib.NL + Lib.RETURN_MSG_HELP_3OF3 + Lib.NL;
+                runCmdReturnCode = RunCmdReturnCode.InfoProvided;
                 return true;
             }
 
@@ -124,17 +124,17 @@ namespace CommandCentral.CC_CoreObjects
             // /i - display internal commands
             if (cmdName.Equals("/i", StringComparison.CurrentCultureIgnoreCase))
             {
-                runCmdReturnString = "Here is a list of Internal Commands" + Lib.NL;
+                runCmdReturnMessage = "Here is a list of Internal Commands:" + Lib.NL;
 
                 for (int i = 0; i < oICommandsList.getCommandsList().Count; i++)
-                    runCmdReturnString += "[" + oICommandsList.getCommandsList()[i].CmdName + "]" + Lib.NL + oICommandsList.getCommandsList()[i].CmdDesc + Lib.NL;
+                    runCmdReturnMessage += "[" + oICommandsList.getCommandsList()[i].CmdName + "]" + Lib.NL + "     " + oICommandsList.getCommandsList()[i].CmdDesc + Lib.NL;
 
-                runCmdReturnType = ReturnType.InfoMsg;
+                runCmdReturnCode = RunCmdReturnCode.InfoProvided;
                 return true;
             }
 
-            runCmdReturnString = "";
-            runCmdReturnType = ReturnType.ReadyForInput;
+            runCmdReturnMessage = "";
+            runCmdReturnCode = RunCmdReturnCode.ReadyForInput;
             return false;
         }
 
@@ -144,16 +144,16 @@ namespace CommandCentral.CC_CoreObjects
         /// Processes internal commands
         /// </summary>
         /// <param name="cmdName"></param>
-        private bool processInternalCmd(ICommand cmd, out ReturnType runCmdReturnType, out string runCmdReturnString)
+        private bool processInternalCmd(ICommand cmd, out RunCmdReturnCode runCmdReturnCode, out string runCmdReturnMessage)
         {
             // Is this an actual internal command?
-            runCmdReturnString = "";
-            runCmdReturnType = ReturnType.ReadyForInput;
+            runCmdReturnMessage = "";
+            runCmdReturnCode = RunCmdReturnCode.ReadyForInput;
             if (!oICommandsList.getCommandsList().Contains(cmd))
                 return false;
 
 
-            // mngcmds
+            // cmdmgr: Command manager window
             if (cmd.CmdName.Equals("cmdmgr"))
             {
                 CommandManagerWindow oCmdMngrWin = new CommandManagerWindow(oCmdWin);
@@ -161,25 +161,35 @@ namespace CommandCentral.CC_CoreObjects
                 oCmdMngrWin.ShowDialog(oCmdWin);
             }
 
-            // processes
-            if (cmd.CmdName.Equals("processes"))
+            // cust: Customize Appearance window
+            if (cmd.CmdName.Equals("cust"))
             {
-                ProcessesWindow oProcessesWin = new ProcessesWindow();
-                oProcessesWin.StartPosition = FormStartPosition.CenterParent;
-                oProcessesWin.ShowDialog(oCmdWin);
+                CustomizeAppearanceWindow oCustAppWin = new CustomizeAppearanceWindow(oCmdWin);
+                oCustAppWin.StartPosition = FormStartPosition.CenterParent;
+                oCustAppWin.ShowDialog(oCmdWin);
+            }
+
+            // processes
+            if (cmd.CmdName.Equals("pid"))
+            {
+                String returnMessageAsString;
+                RunCmdReturnCode returnCode;
+                tryProcessNativeCmd("taskmgr.exe", out returnCode, out returnMessageAsString);
             }
 
             // clear
             if (cmd.CmdName.Equals("clear"))
             {
-                runCmdReturnString = Lib.FIRST_LINE_VALUE;
-                runCmdReturnType = ReturnType.InfoMsg;
+                runCmdReturnMessage = "";
+                runCmdReturnCode = RunCmdReturnCode.ReadyForInput;
                 oCmdWin.clearScreen();
             }
 
             // exit script
             if (cmd.CmdName.Equals("exit"))
-                Application.Exit();
+                Application.ExitThread();
+                 //Application.Exit();
+
 
             return true;
 
@@ -187,37 +197,37 @@ namespace CommandCentral.CC_CoreObjects
 
 
         /// <summary>
-        /// Process external commands
+        /// Process external custom commands
         /// </summary>
-        /// <param name="cmdNameSent"></param>
-        /// <param name="runCmdReturnType"></param>
-        /// <param name="runCmdReturnString"></param>
+        /// <param name="runCmdRequested"></param>
+        /// <param name="runCmdReturnCode"></param>
+        /// <param name="runCmdReturnMessage"></param>
         /// <returns></returns>
-        private bool processExternalCmd(string cmdNameSent, out ReturnType runCmdReturnType, out string runCmdReturnString)
+        private bool processExternalCmd(string runCmdRequested, out RunCmdReturnCode runCmdReturnCode, out string runCmdReturnMessage)
         {
             // Validate cmdName
-            if (!isCmdNameValid(new CommandObject(cmdNameSent), out runCmdReturnType, out runCmdReturnString))
+            if (!isCmdNameValid(new CommandObject(runCmdRequested), out runCmdReturnCode, out runCmdReturnMessage))
                 return false;
 
             // Get CmdName, Parms and RunCmd using cmdNameSent
-            string cmdNameValue = (!cmdNameSent.Contains(" ")) ? cmdNameSent : cmdNameSent.Substring(0, cmdNameSent.IndexOf(" "));
-            string cmdParmsValue = (!cmdNameSent.Contains(" ")) ? "" : cmdNameSent.Substring(cmdNameSent.IndexOf(" ") + 1);
+            string cmdNameValue = (!runCmdRequested.Contains(" ")) ? runCmdRequested : runCmdRequested.Substring(0, runCmdRequested.IndexOf(" "));
+            string cmdParmsValue = (!runCmdRequested.Contains(" ")) ? "" : runCmdRequested.Substring(runCmdRequested.IndexOf(" ") + 1);
             ECommand eCmd = new ECommand(cmdNameValue);
 
 
             // Validate ECommand
             if (!oECommandsList.getCommandsList().Contains(eCmd))
             {
-                runCmdReturnString = "";
-                runCmdReturnType = ReturnType.ReadyForInput;
+                runCmdReturnMessage = "";
+                runCmdReturnCode = RunCmdReturnCode.ReadyForInput;
                 return false;
             }
 
             // Validate RunCmd
             if (eCmd.RunCmd == null || eCmd.RunCmd.Length == 0)
             {
-                runCmdReturnString = Lib.TEXT_TRY_HELP_CMDNOTFOUND;
-                runCmdReturnType = ReturnType.ErrorMsg;
+                runCmdReturnMessage = Lib.RETURN_MSG_CMDNOTFOUND;
+                runCmdReturnCode = RunCmdReturnCode.Error;
                 return false;
             }
 
@@ -230,28 +240,28 @@ namespace CommandCentral.CC_CoreObjects
                 if (cmdParmsValue.Length == 0)
                 {
                     cmdProcess = Process.Start(eCmd.RunCmd);
-                    runCmdReturnString = "Executing...";
-                    runCmdReturnType = ReturnType.ExecMsg;
+                    runCmdReturnMessage = Lib.RETURN_MSG_EXECUTING;
+                    runCmdReturnCode = RunCmdReturnCode.Executed;
                     return true;
                 }
                 // Run with parms
                 if (cmdParmsValue.Length > 0)
                 {
                     cmdProcess = Process.Start(eCmd.RunCmd, cmdParmsValue);
-                    runCmdReturnString = "Executing...";
-                    runCmdReturnType = ReturnType.ExecMsg;
+                    runCmdReturnMessage = "Executing...";
+                    runCmdReturnCode = RunCmdReturnCode.Executed;
                     return true;
                 }
 
                 // All other cases
-                runCmdReturnString = "";
-                runCmdReturnType = ReturnType.ReadyForInput;
+                runCmdReturnMessage = "";
+                runCmdReturnCode = RunCmdReturnCode.ReadyForInput;
                 return true;
             }
             catch (Exception e)
             {
-                runCmdReturnString = Lib.TEXT_TRY_HELP_CMDFAILED;
-                runCmdReturnType = ReturnType.ErrorMsg;
+                runCmdReturnMessage = Lib.RETURN_MSG_CMDFAILED;
+                runCmdReturnCode = RunCmdReturnCode.Error;
                 return false;
             }
         }
@@ -260,13 +270,13 @@ namespace CommandCentral.CC_CoreObjects
         /// Attempt to run command as is (native command)
         /// </summary>
         /// <param name="cmdNameSent"></param>
-        /// <param name="runCmdReturnType"></param>
-        /// <param name="runCmdReturnString"></param>
+        /// <param name="runCmdReturnCode"></param>
+        /// <param name="runCmdReturnMessage"></param>
         /// <returns></returns>
-        private bool tryProcessNativeCmd(string cmdNameSent, out ReturnType runCmdReturnType, out string runCmdReturnString)
+        private bool tryProcessNativeCmd(string cmdNameSent, out RunCmdReturnCode runCmdReturnCode, out string runCmdReturnMessage)
         {
             // Validate cmdName
-            if (!isCmdNameValid(new CommandObject(cmdNameSent), out runCmdReturnType, out runCmdReturnString))
+            if (!isCmdNameValid(new CommandObject(cmdNameSent), out runCmdReturnCode, out runCmdReturnMessage))
                 return false;
 
 
@@ -283,28 +293,28 @@ namespace CommandCentral.CC_CoreObjects
                 if (cmdParmsValue.Length == 0)
                 {
                     cmdProcess = Process.Start(cmdNameValue);
-                    runCmdReturnString = "Executing...";
-                    runCmdReturnType = ReturnType.ExecMsg;
+                    runCmdReturnMessage = "Executing...";
+                    runCmdReturnCode = RunCmdReturnCode.Executed;
                     return true;
                 }
                 // Run with parms
                 if (cmdParmsValue.Length > 0)
                 {
                     cmdProcess = Process.Start(cmdNameValue, cmdParmsValue);
-                    runCmdReturnString = "Executing...";
-                    runCmdReturnType = ReturnType.ExecMsg;
+                    runCmdReturnMessage = "Executing...";
+                    runCmdReturnCode = RunCmdReturnCode.Executed;
                     return true;
                 }
 
                 // All other cases
-                runCmdReturnString = "";
-                runCmdReturnType = ReturnType.ReadyForInput;
+                runCmdReturnMessage = "";
+                runCmdReturnCode = RunCmdReturnCode.ReadyForInput;
                 return true;
             }
             catch (Exception e)
             {
-                runCmdReturnString = Lib.TEXT_TRY_HELP_CMDNOTFOUND;
-                runCmdReturnType = ReturnType.ErrorMsg;
+                runCmdReturnMessage = Lib.RETURN_MSG_CMDNOTFOUND;
+                runCmdReturnCode = RunCmdReturnCode.Error;
                 return false;
             }
         }

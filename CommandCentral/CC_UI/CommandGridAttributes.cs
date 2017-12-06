@@ -15,10 +15,10 @@ namespace CommandCentral.CC_UI
             public const String COL_COMMAND = "Command";
         }
 
-        public static int ROW_HEIGHT = 14;
+        public static int ROW_HEIGHT = 15;
 
-        //public static string MARGIN_CHAR_DEFAULT = ">";
-        public static string MARGIN_CHAR_DEFAULT = "›";
+        public static string MARGIN_CHAR_DEFAULT = ">";
+        //public static string MARGIN_CHAR_DEFAULT = "›";
         public static string MARGIN_CHAR_MESSAGE = "";
 
     }

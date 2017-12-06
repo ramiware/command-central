@@ -19,6 +19,8 @@ namespace CommandCentral.CC_UI
         private ContextMenuStrip gridContextMenu = new ContextMenuStrip();
         private int currentMouseClickRow = -1;
 
+        private Timer performanceTimer = null;
+
         /// <summary>
         /// Constructor
         /// </summary>
@@ -33,7 +35,7 @@ namespace CommandCentral.CC_UI
             this.processesDataGrid.Sort(this.processesDataGrid.Columns["Memory"], ListSortDirection.Descending);
 
             // Start Timer
-            Timer performanceTimer = new Timer();
+            performanceTimer = new Timer();
             performanceTimer.Tick += performanceTimer_Tick;
             performanceTimer.Interval = 1500;
             performanceTimer.Start();
@@ -47,12 +49,26 @@ namespace CommandCentral.CC_UI
             Performance performanceObject = new Performance(this.footerLabelProcessesValue, this.footerLabelCPUValue, this.footerLabelRAMValue);
         }
 
-
+        /// <summary>
+        /// On every tick, do the following
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void performanceTimer_Tick(object sender, EventArgs e)
         {
             RefreshGrid();
         }
 
+        /// <summary>
+        /// Stop ticking on window close and destroy the performance timer so that it is no longer running in the background
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void ProcessesWindow_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            performanceTimer.Stop();
+            performanceTimer = null;
+        }
 
         /// <summary>
         /// 
@@ -79,6 +95,7 @@ namespace CommandCentral.CC_UI
             this.processesDataGrid.Columns["CPU"].Visible = false;
 
             this.processesDataGrid.Columns.Add("Memory", "Memory (K)");
+            this.processesDataGrid.Columns["Memory"].Width = 100;
             this.processesDataGrid.Columns["Memory"].DefaultCellStyle.Format = "N0";
         }
 
@@ -133,9 +150,6 @@ namespace CommandCentral.CC_UI
                     Console.WriteLine("Exception: " + e.ToString());
                     continue;
                 }
-
-                //TODO: Confirm CPU values are good.
-                //TODO: check for a process which disappears while looping
 
                 // ADD / UPDATE row from processDataGrid based on ProcessID comparison
                 foreach (DataGridViewRow row in this.processesDataGrid.Rows)
@@ -296,10 +310,14 @@ namespace CommandCentral.CC_UI
             }
         }
 
-        private void button2_Click(object sender, EventArgs e)
+
+        private void ProcessesWindow_KeyPress(object sender, KeyPressEventArgs e)
         {
-            RefreshGrid();
+            if (e.KeyChar == (char)Keys.Escape)
+                this.Close();
         }
+
+
 
 
 

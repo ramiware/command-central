@@ -10,7 +10,7 @@ namespace CommandCentral.CC_Data
     class AppRegistry
     {
         // Constants
-        private const string APP_PARENT = "RamiWare";
+        private const string APP_PARENT = "RAMIWARE";
         private const string APP_NAME = "Command Central";
         private const string APP_VERSION = "4.0";
 

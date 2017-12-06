@@ -43,6 +43,9 @@
             // 
             // processesDataGrid
             // 
+            this.processesDataGrid.AllowUserToAddRows = false;
+            this.processesDataGrid.AllowUserToDeleteRows = false;
+            this.processesDataGrid.AllowUserToResizeRows = false;
             this.processesDataGrid.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
@@ -107,7 +110,7 @@
             // 
             // footerLabelRAMValue
             // 
-            this.footerLabelRAMValue.Location = new System.Drawing.Point(323, 5);
+            this.footerLabelRAMValue.Location = new System.Drawing.Point(316, 5);
             this.footerLabelRAMValue.Name = "footerLabelRAMValue";
             this.footerLabelRAMValue.Size = new System.Drawing.Size(61, 13);
             this.footerLabelRAMValue.TabIndex = 3;
@@ -116,7 +119,7 @@
             // footerLabelRAMTitle
             // 
             this.footerLabelRAMTitle.AutoSize = true;
-            this.footerLabelRAMTitle.Location = new System.Drawing.Point(217, 5);
+            this.footerLabelRAMTitle.Location = new System.Drawing.Point(210, 5);
             this.footerLabelRAMTitle.Name = "footerLabelRAMTitle";
             this.footerLabelRAMTitle.Size = new System.Drawing.Size(109, 13);
             this.footerLabelRAMTitle.TabIndex = 2;
@@ -124,7 +127,7 @@
             // 
             // footerLabelCPUValue
             // 
-            this.footerLabelCPUValue.Location = new System.Drawing.Point(176, 5);
+            this.footerLabelCPUValue.Location = new System.Drawing.Point(169, 5);
             this.footerLabelCPUValue.Name = "footerLabelCPUValue";
             this.footerLabelCPUValue.Size = new System.Drawing.Size(35, 13);
             this.footerLabelCPUValue.TabIndex = 1;
@@ -133,7 +136,7 @@
             // footerLabelCPUTitle
             // 
             this.footerLabelCPUTitle.AutoSize = true;
-            this.footerLabelCPUTitle.Location = new System.Drawing.Point(112, 5);
+            this.footerLabelCPUTitle.Location = new System.Drawing.Point(105, 5);
             this.footerLabelCPUTitle.Name = "footerLabelCPUTitle";
             this.footerLabelCPUTitle.Size = new System.Drawing.Size(67, 13);
             this.footerLabelCPUTitle.TabIndex = 0;
@@ -146,10 +149,14 @@
             this.ClientSize = new System.Drawing.Size(372, 486);
             this.Controls.Add(this.footerPanel);
             this.Controls.Add(this.processesDataGrid);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.SizableToolWindow;
             this.MinimumSize = new System.Drawing.Size(388, 459);
             this.Name = "ProcessesWindow";
             this.ShowIcon = false;
+            this.ShowInTaskbar = false;
             this.Text = "Processes";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.ProcessesWindow_FormClosing);
+            this.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.ProcessesWindow_KeyPress);
             ((System.ComponentModel.ISupportInitialize)(this.processesDataGrid)).EndInit();
             this.footerPanel.ResumeLayout(false);
             this.footerPanel.PerformLayout();

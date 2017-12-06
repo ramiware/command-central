@@ -249,16 +249,11 @@ namespace CommandCentral.CC_UI
 
 
 
-
-  
-
-
-
-
-
-        /***********************************************************************
-         * TEXT BOX HANDLERS (NO BLANKS)
-         ***********************************************************************/
+        /// <summary>
+        /// TEXT BOX HANDLERS (NO BLANKS)
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void editTab_RunCmdTextBox_TextChanged(object sender, EventArgs e)
         {
             if (editTab_RunCmdTextBox.Text.Length < 1)
@@ -281,33 +276,51 @@ namespace CommandCentral.CC_UI
                 addTab_AddButton.Enabled = true;
         }
 
-        /***********************************************************************
-         * Close Button Handler
-         ***********************************************************************/
+
+        /// <summary>
+        /// Close Button Handler
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void closeButton_Click(object sender, EventArgs e)
         {
             this.Close();
         }
-        /***********************************************************************
-         * KeyPress Handler (Escape Key)
-         ***********************************************************************/
+
+        /// <summary>
+        /// KeyPress Handler (Escape Key)
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void cmdControl_KeyPress(object sender, KeyPressEventArgs e)
         {
             if (e.KeyChar == (char)Keys.Escape)
                 this.Close();
         }
 
-        /***********************************************************************
-         * Shortcuts Handler (ALT + A, E, R) to display Tabs
-         ***********************************************************************/
+        /// <summary>
+        /// Shortcuts Handler (ALT + A, E, R) to display Tabs 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void addToolStripMenuItem_Click_1(object sender, EventArgs e)
         {
             cmdTabControl.SelectTab(0);
         }
+        /// <summary>
+        /// Shortcuts Handler (ALT + A, E, R) to display Tabs
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void editToolStripMenuItem_Click(object sender, EventArgs e)
         {
             cmdTabControl.SelectTab(1);
         }
+        /// <summary>
+        /// Shortcuts Handler (ALT + A, E, R) to display Tabs
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void removeToolStripMenuItem_Click(object sender, EventArgs e)
         {
             cmdTabControl.SelectTab(2);

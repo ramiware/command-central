@@ -15,7 +15,8 @@ namespace CommandCentral.CC_CoreObjects
         public ICommandsList()
         {
             iCmdList.Add(new ICommand("cmdmgr", "-add/edit/del items from your Commands List"));
-            iCmdList.Add(new ICommand("processes", "-displays all currently running processes"));
+            iCmdList.Add(new ICommand("cust", "-customize the appearance of the application"));
+            iCmdList.Add(new ICommand("pid", "-displays all currently running processes"));
             iCmdList.Add(new ICommand("clear", "-clears the screen"));
             iCmdList.Add(new ICommand("exit", "-closes the application"));
 

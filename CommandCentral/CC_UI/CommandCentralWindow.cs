@@ -20,6 +20,8 @@ namespace CommandCentral.CC_UI
         private CommandProcessor cmdProc;
         private CommandBuffer cmdBuffer;
 
+
+        private Frame cFrame;
         /// <summary>
         /// 
         /// </summary>
@@ -28,14 +30,9 @@ namespace CommandCentral.CC_UI
             // Initailize UI
             Application.EnableVisualStyles();
             InitializeComponent();
-
-            // Grid
-            InitializeDataGrid();
-            //this.cmdEntryDataGrid.CellBorderStyle = DataGridViewCellBorderStyle.Single;
-
-            // Custom UI
-            InitializeCustomInterface();
-
+            InitializeUI();
+            SetCustomUIAttributes();
+           
             // Refresh CommandsList
             refreshCommandsList();
 
@@ -53,12 +50,51 @@ namespace CommandCentral.CC_UI
             headerLabel.ContextMenuStrip = ccContextMenuStrip;
 
             // Performance Display
-            Performance performanceObject = new Performance(this.footerLabelProcessesValue, this.footerLabelCPUValue, this.footerLabelRAMValue);
+            //Performance performanceObject = new Performance(this.footerLabelProcessesValue, this.footerLabelCPUValue, this.footerLabelRAMValue);
 
         }
 
+
+        #region FRAME LOGIC  >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+        // Create frame
+        private void generateFrame()
+        {
+            Point defaultPoint = new Point(this.Location.X, this.Location.Y);
+            
+            cFrame = new Frame(this);
+            cFrame.Show();
+            
+            this.Location = defaultPoint;
+        }
+
+        // Mirror movements to frame
+        private void CommandCentralWindow_LocationChanged(object sender, EventArgs e)
+        {
+            if (cFrame == null) return;
+            cFrame.Location = new Point(this.Location.X, this.Location.Y);
+        }
+        // Mirror size changes to frame
+        private void CommandCentralWindow_SizeChanged(object sender, EventArgs e)
+        {
+            if (cFrame == null) return;
+            cFrame.Size = new Size(this.Width, this.Height);
+        }
+
+        #endregion
+
         #region CORE LOGIC  >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
+        /// <summary>
+        /// Generates the solid frame and initialize first row
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void CommandCentralWindow_Shown(object sender, EventArgs e)
+        {
+            generateFrame();
+            createNewRow(CommandProcessor.RunCmdReturnCode.ReadyForInput);
+        }
 
         /// <summary>
         /// Clears the grid
@@ -83,19 +119,9 @@ namespace CommandCentral.CC_UI
         }
 
         /// <summary>
-        /// Initialize first row
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void CommandCentralWindow_Shown(object sender, EventArgs e)
-        {
-            createNewRow(CommandProcessor.ReturnType.InfoMsg, Lib.FIRST_LINE_VALUE);
-        }
-
-        /// <summary>
         /// Handles adding new rows to the grid
         /// </summary>
-        private void createNewRow(CommandProcessor.ReturnType runCmdReturnType, string newRowValue = "")
+        private void createNewRow(CommandProcessor.RunCmdReturnCode runCmdReturnCode, string newRowValue = "")
         {
             // --------------------------------------
             // Format row we are leaving
@@ -104,11 +130,11 @@ namespace CommandCentral.CC_UI
             {
                 this.cmdEntryDataGrid.CurrentCell = this.cmdEntryDataGrid.Rows[cmdEntryDataGrid.RowCount - 1].Cells[CommandGridAttributes.Columns.COL_COMMAND];
 
-                if (runCmdReturnType.Equals(CommandProcessor.ReturnType.ErrorMsg))
+                if (runCmdReturnCode.Equals(CommandProcessor.RunCmdReturnCode.Error))
                     this.cmdEntryDataGrid.CurrentCell.Style.ForeColor = Color.Gray;
-                if (runCmdReturnType.Equals(CommandProcessor.ReturnType.InfoMsg))
+                if (runCmdReturnCode.Equals(CommandProcessor.RunCmdReturnCode.InfoProvided))
                     this.cmdEntryDataGrid.CurrentCell.Style.ForeColor = Color.Gold;
-                if (runCmdReturnType.Equals(CommandProcessor.ReturnType.ExecMsg))
+                if (runCmdReturnCode.Equals(CommandProcessor.RunCmdReturnCode.Executed))
                     this.cmdEntryDataGrid.CurrentCell.Style.ForeColor = Color.LimeGreen;
 
             }
@@ -120,29 +146,23 @@ namespace CommandCentral.CC_UI
             this.cmdEntryDataGrid.Rows.Add();
             newRowID = cmdEntryDataGrid.RowCount - 1;
 
-            if (runCmdReturnType.Equals(CommandProcessor.ReturnType.ErrorMsg) || 
-                runCmdReturnType.Equals(CommandProcessor.ReturnType.InfoMsg) ||
-                runCmdReturnType.Equals(CommandProcessor.ReturnType.ExecMsg))
+            // What to display in the margin depends on the type of row this is
+            if (runCmdReturnCode.Equals(CommandProcessor.RunCmdReturnCode.Error) || 
+                runCmdReturnCode.Equals(CommandProcessor.RunCmdReturnCode.InfoProvided) ||
+                runCmdReturnCode.Equals(CommandProcessor.RunCmdReturnCode.Executed))
                 this.cmdEntryDataGrid.Rows[newRowID].Cells[CommandGridAttributes.Columns.COL_MARGIN].Value = CommandGridAttributes.MARGIN_CHAR_MESSAGE;
-            else
+            
+            if (runCmdReturnCode.Equals(CommandProcessor.RunCmdReturnCode.ReadyForInput))
                 this.cmdEntryDataGrid.Rows[newRowID].Cells[CommandGridAttributes.Columns.COL_MARGIN].Value = CommandGridAttributes.MARGIN_CHAR_DEFAULT;
 
-            // --------------------------------------
             // Set newRowValue - single line
-            // --------------------------------------
             if (!newRowValue.Contains(Lib.NL))
             {
                 this.cmdEntryDataGrid.CurrentCell = this.cmdEntryDataGrid.Rows[newRowID].Cells[CommandGridAttributes.Columns.COL_COMMAND];
                 this.cmdEntryDataGrid.CurrentCell.Value = newRowValue;
-
-                // Handle FIRST_LINE_VALUE - Color code
-                if (newRowValue.Equals(Lib.FIRST_LINE_VALUE))
-                    this.cmdEntryDataGrid.CurrentCell.Style.ForeColor = Color.LimeGreen;
             }
 
-            // --------------------------------------
             // Set newRowValue - multi line
-            // --------------------------------------
             if (newRowValue.Contains(Lib.NL))
             {
                 string currRowValue = "";
@@ -193,6 +213,18 @@ namespace CommandCentral.CC_UI
         }
 
         /// <summary>
+        /// Show CustomizeAppearanceWindow
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void customizeMenuItem_Click(object sender, EventArgs e)
+        {
+            CustomizeAppearanceWindow oCustAppWin = new CustomizeAppearanceWindow(this);
+            oCustAppWin.StartPosition = FormStartPosition.CenterParent;
+            oCustAppWin.ShowDialog(this);
+        }
+
+        /// <summary>
         /// Main Key press handler - what is and is not allowed on the UI side
         /// </summary>
         /// <param name="msg"></param>
@@ -227,10 +259,10 @@ namespace CommandCentral.CC_UI
                     cmdBuffer.addEntry(cmdName);
 
                 // Execute Command
-                string runCmdReturnString = "";
-                CommandProcessor.ReturnType runCmdReturnType;
-                cmdProc.executeCmd(new CommandObject(cmdName), out runCmdReturnType, out runCmdReturnString);
-                createNewRow(runCmdReturnType, runCmdReturnString);
+                string runCmdReturnMessage = "";
+                CommandProcessor.RunCmdReturnCode runCmdReturnCode;
+                cmdProc.executeCmd(new CommandObject(cmdName), out runCmdReturnCode, out runCmdReturnMessage);
+                createNewRow(runCmdReturnCode, runCmdReturnMessage);
        
                 return true;
             }
@@ -276,15 +308,71 @@ namespace CommandCentral.CC_UI
             this.Close();
         }
 
+
+        /// <summary>
+        /// On close, write last settings to the app registry
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void CommandCentralWindow_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            AppRegistry appReg = new AppRegistry();
+
+            // Save location to registry
+            string x = this.Location.X.ToString();
+            string y = this.Location.Y.ToString();
+
+            appReg.setKeyValue(AppRegistry.CCKeys.LocX, x);
+            appReg.setKeyValue(AppRegistry.CCKeys.LocY, y);
+
+            // Save size to registry
+            string width = this.Width.ToString();
+            string height = this.Height.ToString();
+
+            appReg.setKeyValue(AppRegistry.CCKeys.Width, width);
+            appReg.setKeyValue(AppRegistry.CCKeys.Height, height);
+
+        }
+
         #endregion
 
         #region UI SETUP  >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
         /// <summary>
-        /// Sets up the datagrid
+        /// Customizes the interface based on the settings in the user registry
         /// </summary>
-        private void InitializeDataGrid()
+        public void SetCustomUIAttributes()
         {
-            // Setting up datagrid
+            // Custom Settings
+            AppRegistry oAppReg = new AppRegistry();
+
+            //this.setAppColours(oAppReg.getKeyValue(AppRegistry.CCKeys.BackColor), oAppReg.getKeyValue(AppRegistry.CCKeys.ForeColor));
+            this.setAppTransparency(oAppReg.getKeyValue(AppRegistry.CCKeys.Transparency));
+            this.setAppTopMost(oAppReg.getKeyValue(AppRegistry.CCKeys.TopMost));
+            this.setAppStartPosition(oAppReg.getKeyValue(AppRegistry.CCKeys.LocX), oAppReg.getKeyValue(AppRegistry.CCKeys.LocY));
+            this.setAppSize(oAppReg.getKeyValue(AppRegistry.CCKeys.Width), oAppReg.getKeyValue(AppRegistry.CCKeys.Height));
+        }
+
+        /// <summary>
+        /// Initalizes/draws the UI
+        /// </summary>
+        private void InitializeUI()
+        {
+            // Window Title
+            this.Text = About.APP_NAME_LONG + " " + About.APP_VERSION;
+
+            //-----------------------------------------------------
+            // Header Labels
+            //-----------------------------------------------------
+            this.headerLabel.Text = About.APP_COPYRIGHT;
+            this.headerLabel.Font = new Font(Lib.APP_FONT, 9.00F, FontStyle.Regular, GraphicsUnit.Point, ((byte)(0)));
+
+            this.labelUsername.Text = (Lib.HDR_OS_USER).ToUpper();
+            this.labelUsername.Font = new Font(Lib.APP_FONT, 9.00F, FontStyle.Regular, GraphicsUnit.Point, ((byte)(0)));
+            this.labelUsername.ForeColor = Color.LimeGreen;
+
+            //-----------------------------------------------------
+            // DataGrid (Main area)
+            //-----------------------------------------------------
             // ROW TEMPLATE
             DataGridViewRow templateRow = new DataGridViewRow();
             templateRow.Height = CommandGridAttributes.ROW_HEIGHT;
@@ -292,7 +380,7 @@ namespace CommandCentral.CC_UI
 
             // ADD COLUMNS
             DataGridViewTextBoxColumn marginColumn = new DataGridViewTextBoxColumn();
-            marginColumn.Width = 10;
+            marginColumn.Width = 15;
             marginColumn.Name = CommandGridAttributes.Columns.COL_MARGIN;
             marginColumn.ReadOnly = true;
 
@@ -309,76 +397,25 @@ namespace CommandCentral.CC_UI
             defaultCellStyle.ForeColor = this.ForeColor;
             defaultCellStyle.SelectionBackColor = Color.FromArgb(60, 60, 60);
             defaultCellStyle.SelectionForeColor = Color.White;
-            defaultCellStyle.Font = new Font(Lib.APP_FONT, 8.25F, FontStyle.Regular, GraphicsUnit.Point, ((byte)(0)));
+            defaultCellStyle.Font = new Font(Lib.APP_FONT, 9.00F, FontStyle.Regular, GraphicsUnit.Point, ((byte)(0)));
 
             this.cmdEntryDataGrid.DefaultCellStyle = defaultCellStyle;
-        }
 
-        /// <summary>
-        /// Customizes the interface based on the settings in the user registry
-        /// </summary>
-        private void InitializeCustomInterface()
-        {
-            // General Settings
-            this.Font = new Font(Lib.APP_FONT, 8.25F, FontStyle.Regular, GraphicsUnit.Point, ((byte)(0)));
+            //-----------------------------------------------------
+            // Commands List
+            //-----------------------------------------------------
+            //this.Font = new Font(Lib.APP_FONT, 9.00F, FontStyle.Regular, GraphicsUnit.Point, ((byte)(0)));
             this.cmdsListLabel.Font = new Font(Lib.APP_FONT, 8.00F, FontStyle.Bold, GraphicsUnit.Point, ((byte)(0)));
             this.cmdsListLabel.ForeColor = Color.Gold;
             this.cmdsListTextArea.Font = new Font(Lib.APP_FONT, 8.00F, FontStyle.Bold, GraphicsUnit.Point, ((byte)(0)));
 
+            //-----------------------------------------------------
+            // Footer 
+            //-----------------------------------------------------
+            this.footerPanel.Font = new Font(Lib.APP_FONT, 9.00F, FontStyle.Bold, GraphicsUnit.Point, ((byte)(0)));
             this.footerLabelProcessesValue.ForeColor = Color.LimeGreen;
             this.footerLabelCPUValue.ForeColor = Color.LimeGreen;
             this.footerLabelRAMValue.ForeColor = Color.LimeGreen;
-
-            // Custom Settings
-            AppRegistry oAppReg = new AppRegistry();
-
-            this.setAppColours(oAppReg.getKeyValue(AppRegistry.CCKeys.BackColor), oAppReg.getKeyValue(AppRegistry.CCKeys.ForeColor));
-            this.setAppTransparency(oAppReg.getKeyValue(AppRegistry.CCKeys.Transparency));
-            this.setAppTopMost(oAppReg.getKeyValue(AppRegistry.CCKeys.TopMost));
-            this.setAppStartPosition(oAppReg.getKeyValue(AppRegistry.CCKeys.LocX), oAppReg.getKeyValue(AppRegistry.CCKeys.LocY));
-            this.setAppSize(oAppReg.getKeyValue(AppRegistry.CCKeys.Width), oAppReg.getKeyValue(AppRegistry.CCKeys.Height));
-        }
-
-
-        /// <summary>
-        /// Sets the background and text colours
-        /// </summary>
-        /// <param name="bgColourAsString"></param>
-        /// <param name="txtColourAsString"></param>
-        private void setAppColours(string bgColourAsString, string txtColourAsString)
-        {
-            if (bgColourAsString.Length == 0 || txtColourAsString.Length == 0)
-                return;
-
-            Color bgColour = new Color();
-            Color textColour = new Color();
-
-            bgColour = Color.FromName(bgColourAsString);
-            textColour = Color.FromName(txtColourAsString);
-
-            // FORM
-            this.BackColor = bgColour;
-            this.ForeColor = textColour;
-
-            // DATAGRIDVIEW MAIN
-            this.cmdEntryDataGrid.BackgroundColor = bgColour;
-            this.cmdEntryDataGrid.ForeColor = textColour;
-            DataGridViewCellStyle defaultStyle = new DataGridViewCellStyle();
-            defaultStyle.BackColor = bgColour;
-            defaultStyle.ForeColor = textColour;
-            this.cmdEntryDataGrid.DefaultCellStyle = defaultStyle;
-
-            // COMMAND LIST DISPLAY
-            this.cmdsListPanel.BackColor = bgColour;
-            this.cmdsListPanel.ForeColor = textColour;
-            this.cmdsListTextArea.BackColor = bgColour;
-            this.cmdsListTextArea.ForeColor = textColour;
-            this.cmdsListLabel.BackColor = bgColour;
-            this.cmdsListLabel.ForeColor = textColour;
-
-            // VERSION LABEL
-            this.headerLabel.BackColor = bgColour;
-            this.headerLabel.ForeColor = textColour;
         }
 
         /// <summary>
@@ -387,9 +424,9 @@ namespace CommandCentral.CC_UI
         /// <param name="amount"></param>
         private void setAppTransparency(double amount)
         {
-            this.Opacity = amount;
+            this.Opacity = 1-(amount/100);
         }
-        private void setAppTransparency(string amount)
+        public void setAppTransparency(string amount)
         {
             if (amount.Length == 0)
                 return;
@@ -406,7 +443,7 @@ namespace CommandCentral.CC_UI
         /// Sets the TopMost property of the form 
         /// </summary>
         /// <param name="option"></param>
-        private void setAppTopMost(string option)
+        public void setAppTopMost(string option)
         {
             if (option.Length == 0)
                 return;
@@ -447,8 +484,8 @@ namespace CommandCentral.CC_UI
         /// <param name="h"></param>
         private void setAppSize(int w, int h)
         {
-            this.Width = w;
-            this.Height = h;
+            this.Width = (w<0)?0:w;
+            this.Height = (h<0)?0:h;
         }
         private void setAppSize(string w, string h)
         {
@@ -463,7 +500,6 @@ namespace CommandCentral.CC_UI
         }
         #endregion --------------------------------------------------------------------------------------------------------
 
-        
         #region GRID HANDLERS >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
         /// <summary>
         /// If the Commands List panel is clicked on, sets focus back to the cmdEntryDataGrid
@@ -503,6 +539,52 @@ namespace CommandCentral.CC_UI
             if (e.ColumnIndex != 1 || e.RowIndex != this.cmdEntryDataGrid.Rows.Count - 1)
                 SendKeys.Send("{Tab}");
         }
+
+        #endregion
+
+        #region RETIRED
+
+        /// <summary>
+        /// Sets the background and text colours
+        /// </summary>
+        /// <param name="bgColourAsString"></param>
+        /// <param name="txtColourAsString"></param>
+        //public void setAppColours(string bgColourAsString, string txtColourAsString)
+        //{
+        //    if (bgColourAsString.Length == 0 && txtColourAsString.Length == 0)
+        //        return;
+
+        //    Color bgColour = new Color();
+        //    Color textColour = new Color();
+
+        //    bgColour = (bgColourAsString.Length==0) ? this.BackColor : Color.FromName(bgColourAsString);
+        //    textColour = (txtColourAsString.Length==0) ? this.ForeColor : Color.FromName(txtColourAsString);
+
+        //    // FORM
+        //    this.BackColor = bgColour;
+        //    this.ForeColor = textColour;
+
+        //    // DATAGRIDVIEW MAIN
+        //    this.cmdEntryDataGrid.BackgroundColor = bgColour;
+        //    this.cmdEntryDataGrid.ForeColor = textColour;
+        //    DataGridViewCellStyle defaultStyle = new DataGridViewCellStyle();
+        //    defaultStyle.BackColor = bgColour;
+        //    defaultStyle.ForeColor = textColour;
+        //    this.cmdEntryDataGrid.DefaultCellStyle = defaultStyle;
+
+        //    // COMMAND LIST DISPLAY
+        //    this.cmdsListPanel.BackColor = bgColour;
+        //    this.cmdsListPanel.ForeColor = textColour;
+        //    this.cmdsListTextArea.BackColor = bgColour;
+        //    this.cmdsListTextArea.ForeColor = textColour;
+        //    this.cmdsListLabel.BackColor = bgColour;
+        //    this.cmdsListLabel.ForeColor = textColour;
+
+        //    // VERSION LABEL
+        //    this.headerLabel.BackColor = bgColour;
+        //    this.headerLabel.ForeColor = textColour;
+        //}
+
 
         #endregion
 
