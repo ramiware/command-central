@@ -292,12 +292,11 @@ namespace CommandCentral.CC_UI
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void cmdControl_KeyPress(object sender, KeyPressEventArgs e)
+        private void CommandManagerWindow_KeyPress(object sender, KeyPressEventArgs e)
         {
             if (e.KeyChar == (char)Keys.Escape)
                 this.Close();
         }
-
         /// <summary>
         /// Shortcuts Handler (ALT + A, E, R) to display Tabs 
         /// </summary>
@@ -325,7 +324,5 @@ namespace CommandCentral.CC_UI
         {
             cmdTabControl.SelectTab(2);
         }
-
- 
     }
 }

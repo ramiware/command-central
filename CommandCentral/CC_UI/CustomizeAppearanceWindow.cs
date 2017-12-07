@@ -42,7 +42,7 @@ namespace CommandCentral.CC_UI
             string topMostValue = appReg.getKeyValue(AppRegistry.CCKeys.TopMost);
             this.topMostComboBox.Text = (topMostValue == "") ? "No" : topMostValue;
 
-            this.applyButton.Focus();
+            this.transparencyUserValue.Focus();
         }
 
         /// <summary>

@@ -75,26 +75,25 @@
             // 
             // closeButton
             // 
-            this.closeButton.Location = new System.Drawing.Point(368, 357);
+            this.closeButton.Location = new System.Drawing.Point(368, 344);
             this.closeButton.Name = "closeButton";
             this.closeButton.Size = new System.Drawing.Size(75, 23);
             this.closeButton.TabIndex = 6;
             this.closeButton.Text = "Close";
             this.closeButton.UseVisualStyleBackColor = true;
             this.closeButton.Click += new System.EventHandler(this.closeButton_Click);
-            this.closeButton.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.cmdControl_KeyPress);
             // 
             // cmdTabControl
             // 
             this.cmdTabControl.Controls.Add(this.addPage);
             this.cmdTabControl.Controls.Add(this.editPage);
             this.cmdTabControl.Controls.Add(this.removePage);
-            this.cmdTabControl.Location = new System.Drawing.Point(12, 25);
+            this.cmdTabControl.Location = new System.Drawing.Point(12, 12);
             this.cmdTabControl.Name = "cmdTabControl";
             this.cmdTabControl.SelectedIndex = 0;
             this.cmdTabControl.Size = new System.Drawing.Size(435, 326);
             this.cmdTabControl.TabIndex = 5;
-            this.cmdTabControl.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.cmdControl_KeyPress);
+            this.cmdTabControl.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.CommandManagerWindow_KeyPress);
             // 
             // addPage
             // 
@@ -418,7 +417,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(459, 385);
+            this.ClientSize = new System.Drawing.Size(459, 376);
             this.Controls.Add(this.closeButton);
             this.Controls.Add(this.cmdTabControl);
             this.Controls.Add(this.cmdMenu);
@@ -432,7 +431,7 @@
             this.Text = "Command Manager";
             this.TopMost = true;
             this.Shown += new System.EventHandler(this.CommandManagerWindow_Shown);
-            this.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.cmdControl_KeyPress);
+            this.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.CommandManagerWindow_KeyPress);
             this.cmdTabControl.ResumeLayout(false);
             this.addPage.ResumeLayout(false);
             this.addPage.PerformLayout();
