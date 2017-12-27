@@ -68,7 +68,7 @@ namespace CommandCentral.CC_UI
                 }
             }
 
-            oParentForm.SetCustomUIAttributes();
+            oParentForm.SetCustomUIAttributes(true, true, false, false);
         }
 
         /// <summary>

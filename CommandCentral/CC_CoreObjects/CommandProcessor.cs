@@ -320,5 +320,10 @@ namespace CommandCentral.CC_CoreObjects
         }
 
 
+
+        public void updateCommandsList(ECommandsList cmdList)
+        {
+            oECommandsList = cmdList;
+        }
     }
 }

@@ -34,7 +34,7 @@ namespace CommandCentral.CC_UI
             SetCustomUIAttributes();
            
             // Refresh CommandsList
-            refreshCommandsList();
+            refreshInterfaceCommandsList();
 
             // CommandProcessor
             cmdProc = new CommandProcessor(this);
@@ -50,7 +50,7 @@ namespace CommandCentral.CC_UI
             headerLabel.ContextMenuStrip = ccContextMenuStrip;
 
             // Performance Display
-            //Performance performanceObject = new Performance(this.footerLabelProcessesValue, this.footerLabelCPUValue, this.footerLabelRAMValue);
+            Performance performanceObject = new Performance(this.footerLabelProcessesValue, this.footerLabelCPUValue, this.footerLabelRAMValue);
 
         }
 
@@ -107,7 +107,17 @@ namespace CommandCentral.CC_UI
         /// <summary>
         /// Loads/refreshes the CommandsList
         /// </summary>
-        public void refreshCommandsList()
+        public void updateCommandsList(ECommandsList cmdList)
+        {
+            this.refreshInterfaceCommandsList(cmdList);
+            cmdProc.updateCommandsList(cmdList);
+        }
+        private void refreshInterfaceCommandsList()
+        {
+            ECommandsList cmdsList = new ECommandsList();
+            refreshInterfaceCommandsList(cmdsList);
+        }
+        private void refreshInterfaceCommandsList(ECommandsList cmdList)
         {
             ECommandsList cmdsList = new ECommandsList();
             if (cmdsList.getCommandsList().Count == 0)
@@ -340,16 +350,16 @@ namespace CommandCentral.CC_UI
         /// <summary>
         /// Customizes the interface based on the settings in the user registry
         /// </summary>
-        public void SetCustomUIAttributes()
+        public void SetCustomUIAttributes(bool setAppTransparency = true, bool setAppTopMost = true, bool setAppStartPosition=true, bool setAppSize = true)
         {
             // Custom Settings
             AppRegistry oAppReg = new AppRegistry();
 
             //this.setAppColours(oAppReg.getKeyValue(AppRegistry.CCKeys.BackColor), oAppReg.getKeyValue(AppRegistry.CCKeys.ForeColor));
-            this.setAppTransparency(oAppReg.getKeyValue(AppRegistry.CCKeys.Transparency));
-            this.setAppTopMost(oAppReg.getKeyValue(AppRegistry.CCKeys.TopMost));
-            this.setAppStartPosition(oAppReg.getKeyValue(AppRegistry.CCKeys.LocX), oAppReg.getKeyValue(AppRegistry.CCKeys.LocY));
-            this.setAppSize(oAppReg.getKeyValue(AppRegistry.CCKeys.Width), oAppReg.getKeyValue(AppRegistry.CCKeys.Height));
+            if (setAppTransparency) this.setAppTransparency(oAppReg.getKeyValue(AppRegistry.CCKeys.Transparency));
+            if (setAppTopMost) this.setAppTopMost(oAppReg.getKeyValue(AppRegistry.CCKeys.TopMost));
+            if (setAppStartPosition) this.setAppStartPosition(oAppReg.getKeyValue(AppRegistry.CCKeys.LocX), oAppReg.getKeyValue(AppRegistry.CCKeys.LocY));
+            if (setAppSize) this.setAppSize(oAppReg.getKeyValue(AppRegistry.CCKeys.Width), oAppReg.getKeyValue(AppRegistry.CCKeys.Height));
         }
 
         /// <summary>
@@ -365,10 +375,28 @@ namespace CommandCentral.CC_UI
             //-----------------------------------------------------
             this.headerLabel.Text = About.APP_COPYRIGHT;
             this.headerLabel.Font = new Font(Lib.APP_FONT, 9.00F, FontStyle.Regular, GraphicsUnit.Point, ((byte)(0)));
+            this.headerLabel.ForeColor = Color.White;
 
             this.labelUsername.Text = (Lib.HDR_OS_USER).ToUpper();
             this.labelUsername.Font = new Font(Lib.APP_FONT, 9.00F, FontStyle.Regular, GraphicsUnit.Point, ((byte)(0)));
             this.labelUsername.ForeColor = Color.LimeGreen;
+
+            //-----------------------------------------------------
+            // Commands List
+            //-----------------------------------------------------
+            this.cmdsListLabel.Font = new Font(Lib.APP_FONT, 9.00F, FontStyle.Regular, GraphicsUnit.Point, ((byte)(0)));
+            this.cmdsListLabel.ForeColor = Color.LimeGreen;
+
+            this.cmdsListTextArea.Font = new Font(Lib.APP_FONT, 9.00F, FontStyle.Regular, GraphicsUnit.Point, ((byte)(0)));
+            this.cmdsListTextArea.ForeColor = Color.White;
+
+            //-----------------------------------------------------
+            // Footer 
+            //-----------------------------------------------------
+            this.footerPanel.Font = new Font(Lib.APP_FONT, 9.00F, FontStyle.Bold, GraphicsUnit.Point, ((byte)(0)));
+            this.footerLabelProcessesValue.ForeColor = Color.LimeGreen;
+            this.footerLabelCPUValue.ForeColor = Color.LimeGreen;
+            this.footerLabelRAMValue.ForeColor = Color.LimeGreen;
 
             //-----------------------------------------------------
             // DataGrid (Main area)
@@ -401,21 +429,7 @@ namespace CommandCentral.CC_UI
 
             this.cmdEntryDataGrid.DefaultCellStyle = defaultCellStyle;
 
-            //-----------------------------------------------------
-            // Commands List
-            //-----------------------------------------------------
-            //this.Font = new Font(Lib.APP_FONT, 9.00F, FontStyle.Regular, GraphicsUnit.Point, ((byte)(0)));
-            this.cmdsListLabel.Font = new Font(Lib.APP_FONT, 8.00F, FontStyle.Bold, GraphicsUnit.Point, ((byte)(0)));
-            this.cmdsListLabel.ForeColor = Color.Gold;
-            this.cmdsListTextArea.Font = new Font(Lib.APP_FONT, 8.00F, FontStyle.Bold, GraphicsUnit.Point, ((byte)(0)));
 
-            //-----------------------------------------------------
-            // Footer 
-            //-----------------------------------------------------
-            this.footerPanel.Font = new Font(Lib.APP_FONT, 9.00F, FontStyle.Bold, GraphicsUnit.Point, ((byte)(0)));
-            this.footerLabelProcessesValue.ForeColor = Color.LimeGreen;
-            this.footerLabelCPUValue.ForeColor = Color.LimeGreen;
-            this.footerLabelRAMValue.ForeColor = Color.LimeGreen;
         }
 
         /// <summary>

@@ -31,7 +31,7 @@ namespace CommandCentral.CC_UI
             oParentForm = parentWindow;
 
             // Setup UI
-            this.loadCmdList();
+            this.refreshInterfaceCommandLists();
 
         }
 
@@ -49,7 +49,7 @@ namespace CommandCentral.CC_UI
         /// <summary>
         /// Loads Internal Commands List onto interface listboxes
         /// </summary>
-        private void loadCmdList()
+        private void refreshInterfaceCommandLists()
         {
             this.editTab_CmdListBox.Items.Clear();
             this.removeTab_CmdListBox.Items.Clear();
@@ -70,9 +70,6 @@ namespace CommandCentral.CC_UI
             // Setting first item as default.
             this.editTab_CmdListBox.SelectedItem = this.editTab_CmdListBox.Items[0];
             this.removeTab_CmdListBox.SelectedItem = this.removeTab_CmdListBox.Items[0];
-
-            // Refresh ParentWindow list
-            oParentForm.refreshCommandsList();
         }
 
         #region ADD/REMOVE/EDIT
@@ -103,7 +100,11 @@ namespace CommandCentral.CC_UI
             this.addTab_CmdNameTextBox.Clear();
             this.addTab_RunCmdTextBox.Clear();
 
-            this.loadCmdList();
+            // Refresh CommandManagerWindow lists
+            this.refreshInterfaceCommandLists();
+            // Refresh ParentWindow list
+            oParentForm.updateCommandsList(oCmdsList);
+
             MessageBox.Show("Command created successfully.", "New Command", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
         }
@@ -165,7 +166,11 @@ namespace CommandCentral.CC_UI
             // REFRESHING
             this.removeTab_RunCmdTextBox.Clear();
 
-            this.loadCmdList();
+            // Refresh CommandManagerWindow lists
+            this.refreshInterfaceCommandLists();
+            // Refresh ParentWindow list
+            oParentForm.updateCommandsList(oCmdsList);
+
             MessageBox.Show("Command removed successfully.", "Command Removed", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
@@ -240,7 +245,11 @@ namespace CommandCentral.CC_UI
             this.addTab_CmdNameTextBox.Clear();
             this.addTab_RunCmdTextBox.Clear();
 
-            this.loadCmdList();
+            // Refresh CommandManagerWindow lists
+            this.refreshInterfaceCommandLists();
+            // Refresh ParentWindow list
+            oParentForm.updateCommandsList(oCmdsList);
+
             MessageBox.Show("Command saved successfully.", "Edit Command", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
