@@ -7,18 +7,19 @@ using System.Threading.Tasks;
 
 namespace CommandCentral.CC_CoreObjects
 {
-    class ICommandsList
+    class InternalCmdsList
     {
 
-        private List<ICommand> iCmdList = new List<ICommand>();
+        private List<InternalCmd> iCmdList = new List<InternalCmd>();
 
-        public ICommandsList()
+        public InternalCmdsList()
         {
-            iCmdList.Add(new ICommand("cmdmgr", "-add/edit/del items from your Commands List"));
-            iCmdList.Add(new ICommand("cust", "-customize the appearance of the application"));
-            iCmdList.Add(new ICommand("pid", "-displays all currently running processes"));
-            iCmdList.Add(new ICommand("clear", "-clears the screen"));
-            iCmdList.Add(new ICommand("exit", "-closes the application"));
+            iCmdList.Add(new InternalCmd("cmdmgr", "- add/edit/del items from your Commands List"));
+            iCmdList.Add(new InternalCmd("settings", "- command central settings window"));
+            iCmdList.Add(new InternalCmd("note", "- creates a note taking window"));
+            iCmdList.Add(new InternalCmd("onotes", "- opens all saved notes"));
+            iCmdList.Add(new InternalCmd("clear", "- clears the screen"));
+            iCmdList.Add(new InternalCmd("exit", "- closes the application"));
 
         }
 
@@ -26,7 +27,7 @@ namespace CommandCentral.CC_CoreObjects
         /// Returns the Commands List
         /// </summary>
         /// <returns></returns>
-        public List<ICommand> getCommandsList()
+        public List<InternalCmd> getCommandsList()
         {
             return this.iCmdList;
         }
@@ -38,7 +39,7 @@ namespace CommandCentral.CC_CoreObjects
         /// <returns></returns>
         internal string getCmdDesc(string cmdName)
         {
-            foreach (ICommand cmdItem in iCmdList)
+            foreach (InternalCmd cmdItem in iCmdList)
             {
                 if (cmdItem.CmdName.Equals(cmdName, StringComparison.CurrentCultureIgnoreCase))
                     return cmdItem.CmdDesc;

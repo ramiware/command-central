@@ -16,10 +16,11 @@ namespace CommandCentral.CC_UI
 {
     public partial class CommandCentralWindow : Form
     {
-
         private CommandProcessor cmdProc;
         private CommandBuffer cmdBuffer;
-
+        private Performance performanceObject;
+        private ScannerDisplay scannerDisplayObject;
+        private Scanner scanner;
 
         private Frame cFrame;
         /// <summary>
@@ -31,7 +32,6 @@ namespace CommandCentral.CC_UI
             Application.EnableVisualStyles();
             InitializeComponent();
             InitializeUI();
-            SetCustomUIAttributes();
            
             // Refresh CommandsList
             refreshInterfaceCommandsList();
@@ -50,8 +50,18 @@ namespace CommandCentral.CC_UI
             headerLabel.ContextMenuStrip = ccContextMenuStrip;
 
             // Performance Display
-            Performance performanceObject = new Performance(this.footerLabelProcessesValue, this.footerLabelCPUValue, this.footerLabelRAMValue);
+            performanceObject = new Performance(this.footerLabelProcessesValue, this.footerLabelCPUValue, this.footerLabelRAMValue, this);
 
+            // Scanner Display
+            scannerDisplayObject = new ScannerDisplay(this.scanner);
+
+            // Program Settings
+            setCCSettings();
+
+            // Open Notes
+            // Open all note files
+            NoteLib noteLibrary = new NoteLib();
+            noteLibrary.openAllNotes();
         }
 
 
@@ -93,7 +103,7 @@ namespace CommandCentral.CC_UI
         private void CommandCentralWindow_Shown(object sender, EventArgs e)
         {
             generateFrame();
-            createNewRow(CommandProcessor.RunCmdReturnCode.ReadyForInput);
+            createNewRow(CommandProcessor.RowType.ReadyForInput);
         }
 
         /// <summary>
@@ -107,62 +117,62 @@ namespace CommandCentral.CC_UI
         /// <summary>
         /// Loads/refreshes the CommandsList
         /// </summary>
-        public void updateCommandsList(ECommandsList cmdList)
+        public void updateCommandsList(CustomCmdsList cmdList)
         {
             this.refreshInterfaceCommandsList(cmdList);
             cmdProc.updateCommandsList(cmdList);
         }
         private void refreshInterfaceCommandsList()
         {
-            ECommandsList cmdsList = new ECommandsList();
+            CustomCmdsList cmdsList = new CustomCmdsList();
             refreshInterfaceCommandsList(cmdsList);
         }
-        private void refreshInterfaceCommandsList(ECommandsList cmdList)
+        private void refreshInterfaceCommandsList(CustomCmdsList cmdList)
         {
-            ECommandsList cmdsList = new ECommandsList();
+            CustomCmdsList cmdsList = new CustomCmdsList();
             if (cmdsList.getCommandsList().Count == 0)
                 return;
 
             this.cmdsListTextArea.Text = "";
             for (int i = 0; i < cmdsList.getCommandsList().Count; i++)
                 this.cmdsListTextArea.Text += cmdsList.getCommandsList()[i].CmdName + "\r\n";
+            
+            // Added permanent scrollbar here (Version 4.7)
+            this.cmdsListTextArea.ScrollBars = ScrollBars.Vertical;
         }
 
         /// <summary>
         /// Handles adding new rows to the grid
         /// </summary>
-        private void createNewRow(CommandProcessor.RunCmdReturnCode runCmdReturnCode, string newRowValue = "")
+        public void createNewRow(CommandProcessor.RowType rowType, string newRowValue = "", bool newRowRequired=true)
         {
-            // --------------------------------------
             // Format row we are leaving
-            // --------------------------------------
             if (this.cmdEntryDataGrid.RowCount > 0)
             {
                 this.cmdEntryDataGrid.CurrentCell = this.cmdEntryDataGrid.Rows[cmdEntryDataGrid.RowCount - 1].Cells[CommandGridAttributes.Columns.COL_COMMAND];
 
-                if (runCmdReturnCode.Equals(CommandProcessor.RunCmdReturnCode.Error))
-                    this.cmdEntryDataGrid.CurrentCell.Style.ForeColor = Color.Gray;
-                if (runCmdReturnCode.Equals(CommandProcessor.RunCmdReturnCode.InfoProvided))
-                    this.cmdEntryDataGrid.CurrentCell.Style.ForeColor = Color.Gold;
-                if (runCmdReturnCode.Equals(CommandProcessor.RunCmdReturnCode.Executed))
-                    this.cmdEntryDataGrid.CurrentCell.Style.ForeColor = Color.LimeGreen;
-
+                if (rowType.Equals(CommandProcessor.RowType.Error))
+                {
+                    this.cmdEntryDataGrid.CurrentCell = this.cmdEntryDataGrid.Rows[cmdEntryDataGrid.RowCount - 3].Cells[CommandGridAttributes.Columns.COL_COMMAND];
+                    this.cmdEntryDataGrid.CurrentCell.Style.ForeColor = Lib.FAIL_COLOR;
+                }
+                if (rowType.Equals(CommandProcessor.RowType.InfoProvided) || rowType.Equals(CommandProcessor.RowType.Executing))
+                    this.cmdEntryDataGrid.CurrentCell.Style.ForeColor = Lib.DEFAULT_PRIMARY_COLOR;
             }
 
-            // --------------------------------------
             // Add new row
-            // --------------------------------------
             int newRowID;
-            this.cmdEntryDataGrid.Rows.Add();
+            if (newRowRequired)
+                this.cmdEntryDataGrid.Rows.Add();
             newRowID = cmdEntryDataGrid.RowCount - 1;
 
             // What to display in the margin depends on the type of row this is
-            if (runCmdReturnCode.Equals(CommandProcessor.RunCmdReturnCode.Error) || 
-                runCmdReturnCode.Equals(CommandProcessor.RunCmdReturnCode.InfoProvided) ||
-                runCmdReturnCode.Equals(CommandProcessor.RunCmdReturnCode.Executed))
+            if (rowType.Equals(CommandProcessor.RowType.Error) || 
+                rowType.Equals(CommandProcessor.RowType.InfoProvided) ||
+                rowType.Equals(CommandProcessor.RowType.Executing))
                 this.cmdEntryDataGrid.Rows[newRowID].Cells[CommandGridAttributes.Columns.COL_MARGIN].Value = CommandGridAttributes.MARGIN_CHAR_MESSAGE;
             
-            if (runCmdReturnCode.Equals(CommandProcessor.RunCmdReturnCode.ReadyForInput))
+            if (rowType.Equals(CommandProcessor.RowType.ReadyForInput))
                 this.cmdEntryDataGrid.Rows[newRowID].Cells[CommandGridAttributes.Columns.COL_MARGIN].Value = CommandGridAttributes.MARGIN_CHAR_DEFAULT;
 
             // Set newRowValue - single line
@@ -207,7 +217,6 @@ namespace CommandCentral.CC_UI
             // Set focus to new row
             this.cmdEntryDataGrid.Focus();
             this.cmdEntryDataGrid.BeginEdit(false);
-
         }
 
         /// <summary>
@@ -229,7 +238,7 @@ namespace CommandCentral.CC_UI
         /// <param name="e"></param>
         private void customizeMenuItem_Click(object sender, EventArgs e)
         {
-            CustomizeAppearanceWindow oCustAppWin = new CustomizeAppearanceWindow(this);
+            CommandCentralSettingsWindow oCustAppWin = new CommandCentralSettingsWindow(this);
             oCustAppWin.StartPosition = FormStartPosition.CenterParent;
             oCustAppWin.ShowDialog(this);
         }
@@ -269,11 +278,7 @@ namespace CommandCentral.CC_UI
                     cmdBuffer.addEntry(cmdName);
 
                 // Execute Command
-                string runCmdReturnMessage = "";
-                CommandProcessor.RunCmdReturnCode runCmdReturnCode;
-                cmdProc.executeCmd(new CommandObject(cmdName), out runCmdReturnCode, out runCmdReturnMessage);
-                createNewRow(runCmdReturnCode, runCmdReturnMessage);
-       
+                cmdProc.executeCmd(cmdName);
                 return true;
             }
 
@@ -313,11 +318,15 @@ namespace CommandCentral.CC_UI
             return base.ProcessCmdKey(ref msg, keyData);
         }
 
+        /// <summary>
+        /// Exit
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void exitMenuItem_Click(object sender, EventArgs e)
         {
             this.Close();
         }
-
 
         /// <summary>
         /// On close, write last settings to the app registry
@@ -326,40 +335,58 @@ namespace CommandCentral.CC_UI
         /// <param name="e"></param>
         private void CommandCentralWindow_FormClosing(object sender, FormClosingEventArgs e)
         {
-            AppRegistry appReg = new AppRegistry();
-
             // Save location to registry
             string x = this.Location.X.ToString();
             string y = this.Location.Y.ToString();
-
-            appReg.setKeyValue(AppRegistry.CCKeys.LocX, x);
-            appReg.setKeyValue(AppRegistry.CCKeys.LocY, y);
 
             // Save size to registry
             string width = this.Width.ToString();
             string height = this.Height.ToString();
 
-            appReg.setKeyValue(AppRegistry.CCKeys.Width, width);
-            appReg.setKeyValue(AppRegistry.CCKeys.Height, height);
+            //AppRegistry appReg = new AppRegistry();
 
+            //appReg.setKeyValue(AppRegistry.CCKeys.LocX, x);
+            //appReg.setKeyValue(AppRegistry.CCKeys.LocY, y);
+
+            //appReg.setKeyValue(AppRegistry.CCKeys.Width, width);
+            //appReg.setKeyValue(AppRegistry.CCKeys.Height, height);
+
+            AppSettings oAppSettings = new AppSettings();
+
+            // Save location to settings file
+            oAppSettings.setSettingsValue(AppSettings.CCSettingKeys.LocX, x);
+            oAppSettings.setSettingsValue(AppSettings.CCSettingKeys.LocY, y);
+
+            // Save size to settings file
+            oAppSettings.setSettingsValue(AppSettings.CCSettingKeys.Width, width);
+            oAppSettings.setSettingsValue(AppSettings.CCSettingKeys.Height, height);
         }
 
         #endregion
 
         #region UI SETUP  >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
         /// <summary>
-        /// Customizes the interface based on the settings in the user registry
+        /// Customizes the interface and program behavior based on the settings in the user settings file
         /// </summary>
-        public void SetCustomUIAttributes(bool setAppTransparency = true, bool setAppTopMost = true, bool setAppStartPosition=true, bool setAppSize = true)
+        public void setCCSettings(bool setAppTransparency = true, bool setAppTopMost = true, bool setAppStartPosition=true, bool setAppSize = true, bool setThresholdLevels = true)
         {
-            // Custom Settings
-            AppRegistry oAppReg = new AppRegistry();
+            // Custom UI Settings
+            //AppRegistry oAppReg = new AppRegistry();
 
-            //this.setAppColours(oAppReg.getKeyValue(AppRegistry.CCKeys.BackColor), oAppReg.getKeyValue(AppRegistry.CCKeys.ForeColor));
-            if (setAppTransparency) this.setAppTransparency(oAppReg.getKeyValue(AppRegistry.CCKeys.Transparency));
-            if (setAppTopMost) this.setAppTopMost(oAppReg.getKeyValue(AppRegistry.CCKeys.TopMost));
-            if (setAppStartPosition) this.setAppStartPosition(oAppReg.getKeyValue(AppRegistry.CCKeys.LocX), oAppReg.getKeyValue(AppRegistry.CCKeys.LocY));
-            if (setAppSize) this.setAppSize(oAppReg.getKeyValue(AppRegistry.CCKeys.Width), oAppReg.getKeyValue(AppRegistry.CCKeys.Height));
+            //if (setAppTransparency) this.setAppTransparency(oAppReg.getKeyValue(AppRegistry.CCKeys.Transparency));
+            //if (setAppTopMost) this.setAppTopMost(oAppReg.getKeyValue(AppRegistry.CCKeys.TopMost));
+            //if (setAppStartPosition) this.setAppStartPosition(oAppReg.getKeyValue(AppRegistry.CCKeys.LocX), oAppReg.getKeyValue(AppRegistry.CCKeys.LocY));
+            //if (setAppSize) this.setAppSize(oAppReg.getKeyValue(AppRegistry.CCKeys.Width), oAppReg.getKeyValue(AppRegistry.CCKeys.Height));
+        
+            // Custom UI settings
+
+            AppSettings oAppSettings = new AppSettings();
+
+            if (setAppTransparency) this.setAppTransparency(oAppSettings.getSettingValue(AppSettings.CCSettingKeys.Transparency));
+            if (setAppTopMost) this.setAppTopMost(oAppSettings.getSettingValue(AppSettings.CCSettingKeys.TopMost));
+            if (setAppStartPosition) this.setAppStartPosition(oAppSettings.getSettingValue(AppSettings.CCSettingKeys.LocX), oAppSettings.getSettingValue(AppSettings.CCSettingKeys.LocY));
+            if (setAppSize) this.setAppSize(oAppSettings.getSettingValue(AppSettings.CCSettingKeys.Width), oAppSettings.getSettingValue(AppSettings.CCSettingKeys.Height));
+            if (setThresholdLevels) this.setThresholdLevels(oAppSettings.getSettingValue(AppSettings.CCSettingKeys.CPUThresholdLevel1), oAppSettings.getSettingValue(AppSettings.CCSettingKeys.CPUThresholdLevel2), oAppSettings.getSettingValue(AppSettings.CCSettingKeys.RAMThresholdLevel1), oAppSettings.getSettingValue(AppSettings.CCSettingKeys.RAMThresholdLevel2));
         }
 
         /// <summary>
@@ -374,29 +401,48 @@ namespace CommandCentral.CC_UI
             // Header Labels
             //-----------------------------------------------------
             this.headerLabel.Text = About.APP_COPYRIGHT;
-            this.headerLabel.Font = new Font(Lib.APP_FONT, 9.00F, FontStyle.Regular, GraphicsUnit.Point, ((byte)(0)));
-            this.headerLabel.ForeColor = Color.White;
+            this.headerLabel.Font = new Font(Lib.DEFAULT_APP_FONT, 9.00F, FontStyle.Regular, GraphicsUnit.Point, ((byte)(0)));
+            this.headerLabel.ForeColor = Lib.DEFAULT_SECONDARY_COLOR;
 
             this.labelUsername.Text = (Lib.HDR_OS_USER).ToUpper();
-            this.labelUsername.Font = new Font(Lib.APP_FONT, 9.00F, FontStyle.Regular, GraphicsUnit.Point, ((byte)(0)));
-            this.labelUsername.ForeColor = Color.LimeGreen;
+            this.labelUsername.Font = new Font(Lib.DEFAULT_APP_FONT, 9.00F, FontStyle.Regular, GraphicsUnit.Point, ((byte)(0)));
+            this.labelUsername.ForeColor = Lib.DEFAULT_PRIMARY_COLOR;
 
             //-----------------------------------------------------
             // Commands List
             //-----------------------------------------------------
-            this.cmdsListLabel.Font = new Font(Lib.APP_FONT, 9.00F, FontStyle.Regular, GraphicsUnit.Point, ((byte)(0)));
-            this.cmdsListLabel.ForeColor = Color.LimeGreen;
+            this.cmdsListLabel.Font = new Font(Lib.DEFAULT_APP_FONT, 9.00F, FontStyle.Regular, GraphicsUnit.Point, ((byte)(0)));
+            this.cmdsListLabel.ForeColor = Lib.DEFAULT_PRIMARY_COLOR;
 
-            this.cmdsListTextArea.Font = new Font(Lib.APP_FONT, 9.00F, FontStyle.Regular, GraphicsUnit.Point, ((byte)(0)));
-            this.cmdsListTextArea.ForeColor = Color.White;
+            this.cmdsListTextArea.Font = new Font(Lib.DEFAULT_APP_FONT, 9.00F, FontStyle.Regular, GraphicsUnit.Point, ((byte)(0)));
+            this.cmdsListTextArea.ForeColor = Lib.DEFAULT_SECONDARY_COLOR;
 
             //-----------------------------------------------------
             // Footer 
             //-----------------------------------------------------
-            this.footerPanel.Font = new Font(Lib.APP_FONT, 9.00F, FontStyle.Bold, GraphicsUnit.Point, ((byte)(0)));
-            this.footerLabelProcessesValue.ForeColor = Color.LimeGreen;
-            this.footerLabelCPUValue.ForeColor = Color.LimeGreen;
-            this.footerLabelRAMValue.ForeColor = Color.LimeGreen;
+            Font FooterFont = new Font(Lib.DEFAULT_APP_FONT, 9.00F, FontStyle.Bold, GraphicsUnit.Point, ((byte)(0)));
+            this.footerPanel.Font = FooterFont;
+            this.footerLabelProcessesValue.ForeColor = Lib.DEFAULT_PRIMARY_COLOR;
+            this.footerLabelCPUValue.ForeColor = Lib.DEFAULT_PRIMARY_COLOR;
+            this.footerLabelRAMValue.ForeColor = Lib.DEFAULT_PRIMARY_COLOR;
+            Font ValuesFont = new Font(Lib.DEFAULT_APP_FONT, 10.00F, FontStyle.Bold, GraphicsUnit.Point, ((byte)(0)));
+            this.footerLabelProcessesValue.Font = ValuesFont;
+            this.footerLabelCPUValue.Font = ValuesFont;
+            this.footerLabelRAMValue.Font = ValuesFont;
+
+            //-----------------------------------------------------
+            // Scanner Display
+            //-----------------------------------------------------
+            scanner = new Scanner();
+            this.scanner.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            //this.scanner.BackColor = System.Drawing.Color.LimeGreen;
+            this.scanner.BackgroundImage = Properties.Resources.scanner_glow;
+            this.scanner.BackgroundImageLayout = ImageLayout.Stretch;
+            this.scanner.Location = new System.Drawing.Point(0, 405);
+            this.scanner.Name = "panelScannerDisplay";
+            this.scanner.Size = new System.Drawing.Size(Properties.Resources.scanner_glow.Width, Properties.Resources.scanner_glow.Height);
+            this.scanner.TabIndex = 102;
+            this.panelMainArea.Controls.Add(this.scanner);
 
             //-----------------------------------------------------
             // DataGrid (Main area)
@@ -424,8 +470,8 @@ namespace CommandCentral.CC_UI
             defaultCellStyle.BackColor = this.BackColor;
             defaultCellStyle.ForeColor = this.ForeColor;
             defaultCellStyle.SelectionBackColor = Color.FromArgb(60, 60, 60);
-            defaultCellStyle.SelectionForeColor = Color.White;
-            defaultCellStyle.Font = new Font(Lib.APP_FONT, 9.00F, FontStyle.Regular, GraphicsUnit.Point, ((byte)(0)));
+            defaultCellStyle.SelectionForeColor = Lib.DEFAULT_SECONDARY_COLOR;
+            defaultCellStyle.Font = new Font(Lib.DEFAULT_APP_FONT, 9.00F, FontStyle.Regular, GraphicsUnit.Point, ((byte)(0)));
 
             this.cmdEntryDataGrid.DefaultCellStyle = defaultCellStyle;
 
@@ -442,11 +488,12 @@ namespace CommandCentral.CC_UI
         }
         public void setAppTransparency(string amount)
         {
+            double amountAsDouble;
+
+            // Validate first
             if (amount.Length == 0)
                 return;
-
-            double amountAsDouble;
-            if (double.TryParse(amount, out amountAsDouble))
+            else if (double.TryParse(amount, out amountAsDouble))
                 setAppTransparency(amountAsDouble);
             else
                 return;
@@ -481,11 +528,12 @@ namespace CommandCentral.CC_UI
         }
         private void setAppStartPosition(string x, string y)
         {
+            int xAsInt, yAsInt;
+
+            // Validate first
             if (x.Length == 0 || y.Length == 0)
                 return;
-
-            int xAsInt, yAsInt;
-            if (int.TryParse(x, out xAsInt) && int.TryParse(y, out yAsInt))
+            else if (int.TryParse(x, out xAsInt) && int.TryParse(y, out yAsInt))
                 setAppStartPosition(xAsInt, yAsInt);
             else
                 return;
@@ -503,12 +551,35 @@ namespace CommandCentral.CC_UI
         }
         private void setAppSize(string w, string h)
         {
+            int wAsInt, hAsInt;
+
+            // Validate first
             if (w.Length == 0 || h.Length == 0)
                 return;
-
-            int wAsInt, hAsInt;
-            if (int.TryParse(w, out wAsInt) && int.TryParse(h, out hAsInt))
+            else if (int.TryParse(w, out wAsInt) && int.TryParse(h, out hAsInt))
                 setAppSize(wAsInt, hAsInt);
+            else
+                return;
+        }
+
+        /// <summary>
+        /// Set performance threshold values
+        /// </summary>
+        /// <param name="cpuThreshold1"></param>
+        /// <param name="cpuThreshold2"></param>
+        /// <param name="ramThreshold1"></param>
+        /// <param name="ramThreshold2"></param>
+        private void setThresholdLevels(string cpuThreshold1, string cpuThreshold2, string ramThreshold1, string ramThreshold2)
+        {
+            int cpuThreshold1Value, cpuThreshold2Value;
+            double ramThreshold1Value, ramThreshold2Value;
+
+            // Validate first
+            if (cpuThreshold1.Length == 0 || cpuThreshold2.Length == 0 || ramThreshold1.Length == 0 || ramThreshold2.Length == 0)
+                return;
+            else if (int.TryParse(cpuThreshold1, out cpuThreshold1Value) && int.TryParse(cpuThreshold2, out cpuThreshold2Value) &&
+                double.TryParse(ramThreshold1, out ramThreshold1Value) && double.TryParse(ramThreshold2, out ramThreshold2Value))
+                performanceObject.setThresholdLevels(cpuThreshold1Value, cpuThreshold2Value, ramThreshold1Value, ramThreshold2Value);
             else
                 return;
         }
@@ -552,6 +623,18 @@ namespace CommandCentral.CC_UI
         {
             if (e.ColumnIndex != 1 || e.RowIndex != this.cmdEntryDataGrid.Rows.Count - 1)
                 SendKeys.Send("{Tab}");
+        }
+
+        private void cmdsListTextArea_MouseHover(object sender, EventArgs e)
+        {
+            // Note: Commented out in version 4.7. Added permanent scrollbar to Constructor.
+            //this.cmdsListTextArea.ScrollBars = ScrollBars.Vertical;
+        }
+
+        private void cmdsListTextArea_MouseLeave(object sender, EventArgs e)
+        {
+            // Note: Commented out in version 4.7
+            //this.cmdsListTextArea.ScrollBars = ScrollBars.None;
         }
 
         #endregion

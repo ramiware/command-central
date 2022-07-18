@@ -5,7 +5,7 @@ using System.Text;
 
 namespace CommandCentral.CC_CoreObjects
 {
-    public class ECommand : CommandObject
+    public class CustomCmd : CommandObject
     {
         public string RunCmd { get; set; }
 
@@ -14,7 +14,7 @@ namespace CommandCentral.CC_CoreObjects
         /// </summary>
         /// <param name="cmdName"></param>
         /// <param name="runCmd"></param>
-        public ECommand(string cmdName, string runCmd)
+        public CustomCmd(string cmdName, string runCmd)
         {
             this.CmdName = cmdName;
             this.RunCmd = runCmd;
@@ -24,11 +24,11 @@ namespace CommandCentral.CC_CoreObjects
         /// Constructor: Creates a Command object - retrieves RunCmd from CommandsList
         /// </summary>
         /// <param name="cmdName"></param>
-        public ECommand(string cmdName)
+        public CustomCmd(string cmdName)
         {
             CmdName = cmdName;
 
-            ECommandsList cmdList = new ECommandsList();
+            CustomCmdsList cmdList = new CustomCmdsList();
             RunCmd = cmdList.getRunCmd(cmdName);
         }
     }

@@ -8,15 +8,15 @@ using System.Threading.Tasks;
 
 namespace CommandCentral.CC_CoreObjects
 {
-    public class ECommandsList
+    public class CustomCmdsList
     {
         // List of Commands
-        private List<ECommand> cmdsList = new List<ECommand>();
+        private List<CustomCmd> cmdsList = new List<CustomCmd>();
 
         /// <summary>
         /// Constructor: Loads the commands file entries into the cmdsList local object
         /// </summary>
-        public ECommandsList()
+        public CustomCmdsList()
         {
             // get commands from command file as array list
             // parse into List<Command> format
@@ -27,7 +27,7 @@ namespace CommandCentral.CC_CoreObjects
             {
                 name = currItem.Substring(0, currItem.IndexOf("=")).Trim().ToUpper();
                 runCmd = currItem.Substring(currItem.IndexOf("=") + 1).Trim();
-                cmdsList.Add(new ECommand(name, runCmd));
+                cmdsList.Add(new CustomCmd(name, runCmd));
             }
         }
 
@@ -36,7 +36,7 @@ namespace CommandCentral.CC_CoreObjects
         /// </summary>
         /// <param name="newCmd"></param>
         /// <returns></returns>
-        public bool addCmd(ECommand newCmd)
+        public bool addCmd(CustomCmd newCmd)
         {
             // do not allow 2 commands with same name
             if (cmdsList.Contains(newCmd))
@@ -56,7 +56,7 @@ namespace CommandCentral.CC_CoreObjects
         /// Removes the cmd from the cmdsList and command filea
         /// </summary>
         /// <param name="removeCmd"></param>
-        public void removeCmd(ECommand removeCmd)
+        public void removeCmd(CustomCmd removeCmd)
         {
             // remove cmd from list
             cmdsList.Remove(removeCmd);
@@ -69,7 +69,7 @@ namespace CommandCentral.CC_CoreObjects
         /// Returns the Commands List
         /// </summary>
         /// <returns></returns>
-        public List<ECommand> getCommandsList()
+        public List<CustomCmd> getCommandsList()
         {
             return cmdsList;
         }
@@ -81,7 +81,7 @@ namespace CommandCentral.CC_CoreObjects
         /// <returns></returns>
         internal string getRunCmd(string cmdName)
         {
-            foreach (ECommand cmdItem in cmdsList)
+            foreach (CustomCmd cmdItem in cmdsList)
             {
                 if (cmdItem.CmdName.Equals(cmdName, StringComparison.CurrentCultureIgnoreCase))
                     return cmdItem.RunCmd;

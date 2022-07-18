@@ -16,6 +16,8 @@ namespace CommandCentral.CC_UI
 {
     public partial class ProcessesWindow : Form
     {
+        #region RETIRED
+        /*
         private ContextMenuStrip gridContextMenu = new ContextMenuStrip();
         private int currentMouseClickRow = -1;
 
@@ -318,8 +320,8 @@ namespace CommandCentral.CC_UI
         }
 
 
-
-
+        */
+        #endregion
 
     }
 }

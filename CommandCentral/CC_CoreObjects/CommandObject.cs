@@ -18,7 +18,10 @@ namespace CommandCentral.CC_CoreObjects
 
         public CommandObject(string cmdName)
         {
-            CmdName = cmdName;
+            if (cmdName == null || cmdName.Trim().Length == 0)
+                cmdName = "";
+
+            CmdName = cmdName.Trim();
         }
 
         /// <summary>

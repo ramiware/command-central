@@ -12,13 +12,15 @@ namespace CommandCentral.CC_UI
 {
     public partial class Frame : Form
     {
-        private CommandCentralWindow oParent;
+        //private CommandCentralWindow oParent;
+        private Form oParent;
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="parentWindow"></param>
-        public Frame(CommandCentralWindow parentWindow)
+        //public Frame(CommandCentralWindow parentWindow)
+        public Frame(Form parentWindow)
         {
             InitializeComponent();
             oParent = parentWindow;
@@ -39,6 +41,12 @@ namespace CommandCentral.CC_UI
             this.Icon = oParent.Icon;
             //oParent.Icon = null;
 
+            // FormBorderStyle
+            this.FormBorderStyle = oParent.FormBorderStyle;
+
+            this.MinimizeBox = oParent.MinimizeBox;
+            this.MaximizeBox = oParent.MaximizeBox;
+
             // Location
             this.Location = new Point(oParent.Location.X, oParent.Location.Y);
 
@@ -47,6 +55,7 @@ namespace CommandCentral.CC_UI
 
             // Min Size
             this.MinimumSize = new Size(oParent.MinimumSize.Width, oParent.MinimumSize.Height);
+
 
             oParent.Focus();
         }

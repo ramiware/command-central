@@ -82,7 +82,7 @@ namespace CommandCentral.CC_Data
         /// </summary>
         /// <param name="cmdList"></param>
         /// <returns></returns>
-        internal bool writeCmdsToFile(List<ECommand> cmdList)
+        internal bool writeCmdsToFile(List<CustomCmd> cmdList)
         {
             StreamWriter sw = null;
             try
@@ -91,7 +91,7 @@ namespace CommandCentral.CC_Data
                 {
                     FileInfo commandsFile = new FileInfo(COMMANDS_FILEPATH + COMMANDS_FILENAME);
 
-                    foreach (ECommand cmd in cmdList)
+                    foreach (CustomCmd cmd in cmdList)
                         sw.WriteLine(cmd.CmdName+"="+cmd.RunCmd);
 
                     sw.Close();

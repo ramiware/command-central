@@ -71,7 +71,7 @@
             this.processesDataGrid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.processesDataGrid.Size = new System.Drawing.Size(372, 465);
             this.processesDataGrid.TabIndex = 0;
-            this.processesDataGrid.CellMouseDown += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.processesDataGrid_CellMouseDown);
+            //this.processesDataGrid.CellMouseDown += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.processesDataGrid_CellMouseDown);
             // 
             // footerPanel
             // 
@@ -155,8 +155,8 @@
             this.ShowIcon = false;
             this.ShowInTaskbar = false;
             this.Text = "Processes";
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.ProcessesWindow_FormClosing);
-            this.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.ProcessesWindow_KeyPress);
+            //this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.ProcessesWindow_FormClosing);
+            //this.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.ProcessesWindow_KeyPress);
             ((System.ComponentModel.ISupportInitialize)(this.processesDataGrid)).EndInit();
             this.footerPanel.ResumeLayout(false);
             this.footerPanel.PerformLayout();

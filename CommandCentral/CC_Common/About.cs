@@ -12,7 +12,7 @@ namespace CommandCentral.CC_Common
 
         public static string APP_NAME_LONG = "Command Central";
         public static string APP_NAME_SHORT = "CC";
-        public static string APP_VERSION = "4.00";
+        public static string APP_VERSION = "4.7";
 
         public static string APP_DESCRIPTION = "Command Central is a hybrid between the command prompt and the windows run command. " +
                                                "Commonly adopted by the advanced user who prefers the keyboard over the mouse, and who loves using shortcuts. " +

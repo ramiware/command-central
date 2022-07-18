@@ -52,14 +52,18 @@
     <Compile Include="CC_Common\Lib.cs" />
     <Compile Include="CC_CoreObjects\CommandBuffer.cs" />
     <Compile Include="CC_CoreObjects\CommandObject.cs" />
-    <Compile Include="CC_CoreObjects\ECommand.cs" />
+    <Compile Include="CC_CoreObjects\CustomCmd.cs" />
     <Compile Include="CC_CoreObjects\CommandProcessor.cs" />
-    <Compile Include="CC_CoreObjects\ECommandsList.cs" />
-    <Compile Include="CC_CoreObjects\ICommand.cs" />
-    <Compile Include="CC_CoreObjects\ICommandsList.cs" />
+    <Compile Include="CC_CoreObjects\CustomCmdsList.cs" />
+    <Compile Include="CC_CoreObjects\InternalCmd.cs" />
+    <Compile Include="CC_CoreObjects\InternalCmdsList.cs" />
     <Compile Include="CC_CoreObjects\Performance.cs" />
+    <Compile Include="CC_CoreObjects\ScannerDisplay.cs" />
     <Compile Include="CC_Data\AppRegistry.cs" />
+    <Compile Include="CC_Data\AppSettings.cs" />
     <Compile Include="CC_Data\CommandsFile.cs" />
+    <Compile Include="CC_Data\NoteFile.cs" />
+    <Compile Include="CC_Data\NoteLib.cs" />
     <Compile Include="CC_UI\CommandCentralWindow.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -73,17 +77,26 @@
     <Compile Include="CC_UI\CommandManagerWindow.Designer.cs">
       <DependentUpon>CommandManagerWindow.cs</DependentUpon>
     </Compile>
-    <Compile Include="CC_UI\CustomizeAppearanceWindow.cs">
+    <Compile Include="CC_UI\CommandCentralSettingsWindow.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="CC_UI\CustomizeAppearanceWindow.Designer.cs">
-      <DependentUpon>CustomizeAppearanceWindow.cs</DependentUpon>
+    <Compile Include="CC_UI\CommandCentralSettingsWindow.Designer.cs">
+      <DependentUpon>CommandCentralSettingsWindow.cs</DependentUpon>
     </Compile>
     <Compile Include="CC_UI\Frame.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="CC_UI\Frame.Designer.cs">
       <DependentUpon>Frame.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CC_UI\NoteWindow.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="CC_UI\NoteWindow.Designer.cs">
+      <DependentUpon>NoteWindow.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CC_UI\Scanner.cs">
+      <SubType>Component</SubType>
     </Compile>
     <Compile Include="Retired\ProcessesWindow.cs">
       <SubType>Form</SubType>
@@ -100,11 +113,14 @@
     <EmbeddedResource Include="CC_UI\CommandManagerWindow.resx">
       <DependentUpon>CommandManagerWindow.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="CC_UI\CustomizeAppearanceWindow.resx">
-      <DependentUpon>CustomizeAppearanceWindow.cs</DependentUpon>
+    <EmbeddedResource Include="CC_UI\CommandCentralSettingsWindow.resx">
+      <DependentUpon>CommandCentralSettingsWindow.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="CC_UI\Frame.resx">
       <DependentUpon>Frame.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="CC_UI\NoteWindow.resx">
+      <DependentUpon>NoteWindow.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Retired\ProcessesWindow.resx">
       <DependentUpon>ProcessesWindow.cs</DependentUpon>
@@ -119,6 +135,7 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <None Include="CC_PerformanceTesting\CPUStressTest.bat" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -128,12 +145,17 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <None Include="_Resources\Scanner\scanner.xcf" />
+    <None Include="_Resources\Scanner\scanner_bar.xcf" />
+    <None Include="_Resources\Scanner\scanner_glow.xcf" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
+    <Content Include="_Resources\Scanner\scanner_glow.png" />
+    <None Include="Resources\scanner_bar.png" />
     <Content Include="_Resources\Icons\16_command.png" />
     <Content Include="_Resources\Icons\16_exit.png" />
     <Content Include="_Resources\Icons\16_users.png" />
@@ -141,6 +163,7 @@
     <Content Include="_Resources\Icons\32_users.png" />
     <Content Include="_Resources\Icons\CommandCentral.ico" />
     <Content Include="_Resources\Images\command_central_256.png" />
+    <Content Include="_Resources\Scanner\scanner_bar.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(CommandCentralWindow));
             this.headerLabel = new System.Windows.Forms.Label();
             this.cmdsListPanel = new System.Windows.Forms.Panel();
@@ -37,6 +37,7 @@
             this.cmdsListTextArea = new System.Windows.Forms.TextBox();
             this.cmdEntryDataGrid = new System.Windows.Forms.DataGridView();
             this.panelMainArea = new System.Windows.Forms.Panel();
+            this.panelScannerDisplay = new System.Windows.Forms.Panel();
             this.labelUsername = new System.Windows.Forms.Label();
             this.footerPanel = new System.Windows.Forms.Panel();
             this.footerLabelProcessesValue = new System.Windows.Forms.Label();
@@ -77,7 +78,7 @@
             this.cmdsListPanel.Location = new System.Drawing.Point(437, 3);
             this.cmdsListPanel.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.cmdsListPanel.Name = "cmdsListPanel";
-            this.cmdsListPanel.Size = new System.Drawing.Size(92, 411);
+            this.cmdsListPanel.Size = new System.Drawing.Size(92, 401);
             this.cmdsListPanel.TabIndex = 2;
             // 
             // cmdsListLabel
@@ -107,10 +108,12 @@
             this.cmdsListTextArea.Name = "cmdsListTextArea";
             this.cmdsListTextArea.ReadOnly = true;
             this.cmdsListTextArea.ShortcutsEnabled = false;
-            this.cmdsListTextArea.Size = new System.Drawing.Size(91, 381);
+            this.cmdsListTextArea.Size = new System.Drawing.Size(91, 361);
             this.cmdsListTextArea.TabIndex = 99;
             this.cmdsListTextArea.TabStop = false;
             this.cmdsListTextArea.Enter += new System.EventHandler(this.cmdsListTextArea_Enter);
+            this.cmdsListTextArea.MouseLeave += new System.EventHandler(this.cmdsListTextArea_MouseLeave);
+            this.cmdsListTextArea.MouseHover += new System.EventHandler(this.cmdsListTextArea_MouseHover);
             // 
             // cmdEntryDataGrid
             // 
@@ -128,14 +131,14 @@
             this.cmdEntryDataGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.cmdEntryDataGrid.ColumnHeadersVisible = false;
             this.cmdEntryDataGrid.Cursor = System.Windows.Forms.Cursors.IBeam;
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.TopLeft;
-            dataGridViewCellStyle2.BackColor = System.Drawing.Color.Black;
-            dataGridViewCellStyle2.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle2.ForeColor = System.Drawing.Color.White;
-            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.cmdEntryDataGrid.DefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.TopLeft;
+            dataGridViewCellStyle1.BackColor = System.Drawing.Color.Black;
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle1.ForeColor = System.Drawing.Color.White;
+            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.cmdEntryDataGrid.DefaultCellStyle = dataGridViewCellStyle1;
             this.cmdEntryDataGrid.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnKeystroke;
             this.cmdEntryDataGrid.GridColor = System.Drawing.Color.Yellow;
             this.cmdEntryDataGrid.ImeMode = System.Windows.Forms.ImeMode.NoControl;
@@ -147,7 +150,7 @@
             this.cmdEntryDataGrid.RowTemplate.Height = 23;
             this.cmdEntryDataGrid.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.cmdEntryDataGrid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
-            this.cmdEntryDataGrid.Size = new System.Drawing.Size(436, 392);
+            this.cmdEntryDataGrid.Size = new System.Drawing.Size(436, 382);
             this.cmdEntryDataGrid.TabIndex = 0;
             this.cmdEntryDataGrid.TabStop = false;
             this.cmdEntryDataGrid.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.cmdEntryDataGrid_CellClick);
@@ -156,6 +159,7 @@
             // panelMainArea
             // 
             this.panelMainArea.BackColor = System.Drawing.Color.Black;
+            this.panelMainArea.Controls.Add(this.panelScannerDisplay);
             this.panelMainArea.Controls.Add(this.labelUsername);
             this.panelMainArea.Controls.Add(this.footerPanel);
             this.panelMainArea.Controls.Add(this.cmdsListPanel);
@@ -166,6 +170,18 @@
             this.panelMainArea.Name = "panelMainArea";
             this.panelMainArea.Size = new System.Drawing.Size(534, 443);
             this.panelMainArea.TabIndex = 100;
+            // 
+            // panelScannerDisplay
+            // 
+            this.panelScannerDisplay.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.panelScannerDisplay.BackColor = System.Drawing.Color.Transparent;
+            this.panelScannerDisplay.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("panelScannerDisplay.BackgroundImage")));
+            this.panelScannerDisplay.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+            this.panelScannerDisplay.Location = new System.Drawing.Point(0, 405);
+            this.panelScannerDisplay.Name = "panelScannerDisplay";
+            this.panelScannerDisplay.Size = new System.Drawing.Size(128, 15);
+            this.panelScannerDisplay.TabIndex = 102;
+            this.panelScannerDisplay.Visible = false;
             // 
             // labelUsername
             // 
@@ -199,11 +215,12 @@
             // 
             // footerLabelProcessesValue
             // 
-            this.footerLabelProcessesValue.Location = new System.Drawing.Point(70, 5);
+            this.footerLabelProcessesValue.Location = new System.Drawing.Point(66, 4);
             this.footerLabelProcessesValue.Name = "footerLabelProcessesValue";
             this.footerLabelProcessesValue.Size = new System.Drawing.Size(30, 13);
             this.footerLabelProcessesValue.TabIndex = 5;
             this.footerLabelProcessesValue.Text = "100";
+            this.footerLabelProcessesValue.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // footerLabelProcessesTitle
             // 
@@ -216,11 +233,12 @@
             // 
             // footerLabelRAMValue
             // 
-            this.footerLabelRAMValue.Location = new System.Drawing.Point(323, 5);
+            this.footerLabelRAMValue.Location = new System.Drawing.Point(315, 4);
             this.footerLabelRAMValue.Name = "footerLabelRAMValue";
             this.footerLabelRAMValue.Size = new System.Drawing.Size(61, 13);
             this.footerLabelRAMValue.TabIndex = 3;
             this.footerLabelRAMValue.Text = "10.36 GB";
+            this.footerLabelRAMValue.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // footerLabelRAMTitle
             // 
@@ -233,11 +251,13 @@
             // 
             // footerLabelCPUValue
             // 
-            this.footerLabelCPUValue.Location = new System.Drawing.Point(176, 5);
+            this.footerLabelCPUValue.ForeColor = System.Drawing.Color.White;
+            this.footerLabelCPUValue.Location = new System.Drawing.Point(172, 4);
             this.footerLabelCPUValue.Name = "footerLabelCPUValue";
             this.footerLabelCPUValue.Size = new System.Drawing.Size(35, 13);
             this.footerLabelCPUValue.TabIndex = 1;
             this.footerLabelCPUValue.Text = "100%";
+            this.footerLabelCPUValue.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // footerLabelCPUTitle
             // 
@@ -289,6 +309,7 @@
             this.ClientSize = new System.Drawing.Size(534, 462);
             this.Controls.Add(this.panelMainArea);
             this.Controls.Add(this.headerLabel);
+            this.DoubleBuffered = true;
             this.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.ForeColor = System.Drawing.Color.White;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -297,6 +318,7 @@
             this.MinimizeBox = false;
             this.MinimumSize = new System.Drawing.Size(412, 399);
             this.Name = "CommandCentralWindow";
+            this.Opacity = 0.8D;
             this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.CommandCentralWindow_FormClosing);
             this.Shown += new System.EventHandler(this.CommandCentralWindow_Shown);
@@ -333,6 +355,7 @@
         private System.Windows.Forms.Label footerLabelProcessesValue;
         private System.Windows.Forms.Label footerLabelProcessesTitle;
         private System.Windows.Forms.Label labelUsername;
+        private System.Windows.Forms.Panel panelScannerDisplay;
     }
 }
 

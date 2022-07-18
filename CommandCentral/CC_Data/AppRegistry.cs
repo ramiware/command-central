@@ -1,4 +1,5 @@
-﻿using Microsoft.Win32;
+﻿using CommandCentral.CC_Common;
+using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,9 +11,9 @@ namespace CommandCentral.CC_Data
     class AppRegistry
     {
         // Constants
-        private const string APP_PARENT = "RAMIWARE";
-        private const string APP_NAME = "Command Central";
-        private const string APP_VERSION = "4.0";
+        private string APP_PARENT = About.APP_PARENT_NAME;
+        private string APP_NAME = About.APP_NAME_LONG;
+        private string APP_VERSION = About.APP_VERSION;
 
         // Reigstry object
         private RegistryKey key;

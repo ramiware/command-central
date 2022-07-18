@@ -16,7 +16,7 @@ namespace CommandCentral.CC_UI
     public partial class CommandManagerWindow : Form
     {
         private CommandCentralWindow oParentForm;
-        private ECommandsList oCmdsList;
+        private CustomCmdsList oCmdsList;
 
 
         /// <summary>
@@ -27,7 +27,7 @@ namespace CommandCentral.CC_UI
             InitializeComponent();
 
             // Setup objects
-            oCmdsList = new ECommandsList();
+            oCmdsList = new CustomCmdsList();
             oParentForm = parentWindow;
 
             // Setup UI
@@ -54,7 +54,7 @@ namespace CommandCentral.CC_UI
             this.editTab_CmdListBox.Items.Clear();
             this.removeTab_CmdListBox.Items.Clear();
 
-            List<ECommand> cmdsList = oCmdsList.getCommandsList();
+            List<CustomCmd> cmdsList = oCmdsList.getCommandsList();
             if (cmdsList.Count == 0)
                 return;
 
@@ -87,7 +87,7 @@ namespace CommandCentral.CC_UI
             if (name.Length == 0 || command.Length == 0)
                 return;
 
-            bool result = oCmdsList.addCmd(new ECommand(name, command));
+            bool result = oCmdsList.addCmd(new CustomCmd(name, command));
 
             // IF failed to add
             if (!result)
@@ -149,7 +149,7 @@ namespace CommandCentral.CC_UI
         private void removeTab_CmdListBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             string selectedCmdName = this.removeTab_CmdListBox.SelectedItem.ToString();
-            ECommand selectedCommand = new ECommand(selectedCmdName);
+            CustomCmd selectedCommand = new CustomCmd(selectedCmdName);
 
             this.removeTab_RunCmdTextBox.Text = selectedCommand.RunCmd;
         }
@@ -160,7 +160,7 @@ namespace CommandCentral.CC_UI
         /// <param name="e"></param>
         private void removeTab_RemoveButton_Click(object sender, EventArgs e)
         {
-            ECommand remCmd = new ECommand(this.removeTab_CmdListBox.SelectedItem.ToString());
+            CustomCmd remCmd = new CustomCmd(this.removeTab_CmdListBox.SelectedItem.ToString());
             oCmdsList.removeCmd(remCmd);
 
             // REFRESHING
@@ -183,7 +183,7 @@ namespace CommandCentral.CC_UI
         private void editTab_CmdListBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             string selectedCmdName = this.editTab_CmdListBox.SelectedItem.ToString();
-            ECommand selectedCommand = new ECommand(selectedCmdName);
+            CustomCmd selectedCommand = new CustomCmd(selectedCmdName);
 
             this.editTab_RunCmdTextBox.Text = selectedCommand.RunCmd;
         }
@@ -231,8 +231,8 @@ namespace CommandCentral.CC_UI
                 return;
 
             // Do "edit" via remove/add
-            oCmdsList.removeCmd(new ECommand(name));
-            bool result = oCmdsList.addCmd(new ECommand(name, command));
+            oCmdsList.removeCmd(new CustomCmd(name));
+            bool result = oCmdsList.addCmd(new CustomCmd(name, command));
 
             // IF failed to add
             if (!result)

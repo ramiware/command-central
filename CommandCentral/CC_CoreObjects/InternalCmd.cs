@@ -9,7 +9,7 @@ namespace CommandCentral.CC_CoreObjects
     /// <summary>
     /// Internal Commands
     /// </summary>
-    class ICommand : CommandObject
+    public class InternalCmd : CommandObject
     {
         public string CmdDesc { get; set; }
 
@@ -18,7 +18,7 @@ namespace CommandCentral.CC_CoreObjects
         /// </summary>
         /// <param name="cmdName"></param>
         /// <param name="cmdDesc"></param>
-        public ICommand(string cmdName, string cmdDesc)
+        public InternalCmd(string cmdName, string cmdDesc)
         {
             CmdName = cmdName;
             CmdDesc = cmdDesc;
@@ -28,11 +28,11 @@ namespace CommandCentral.CC_CoreObjects
         /// Constructor: Creates a Command object - retrieves CmdDesc from CommandsList
         /// </summary>
         /// <param name="cmdName"></param>
-        public ICommand(string cmdName)
+        public InternalCmd(string cmdName)
         {
             CmdName = cmdName;
 
-            ICommandsList cmdList = new ICommandsList();
+            InternalCmdsList cmdList = new InternalCmdsList();
             CmdDesc = cmdList.getCmdDesc(cmdName);
         }
 
